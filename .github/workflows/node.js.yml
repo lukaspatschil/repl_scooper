@@ -24,6 +24,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm run lint
-    - run: npm run compile
-    - run: npm test
+    
+    - uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: install 
+    - uses: borales/actions-yarn@v2.0.0
+      with: 
+        cmd: lint
+    - uses: borales/actions-yarn@v2.0.0
+      with: 
+        cmd: compile
+    - uses: borales/actions-yarn@v2.0.0
+      with: 
+        cmd: test
