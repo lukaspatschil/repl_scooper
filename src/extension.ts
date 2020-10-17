@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { getWebviewContnet } from "./webview/screen";
+import * as path from "path";
+import { Variable } from "./webview/types";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -33,10 +35,42 @@ export function activate(context: vscode.ExtensionContext) {
       }
     );
 
-    panel.webview.html = getWebviewContnet();
+    const paths = getPaths(panel, context);
+    const testVariables: Variable[] = [];
+
+    const var1: Variable = {
+      name: "x",
+      value: 10,
+    };
+    const var2: Variable = {
+      name: "y",
+      value: "This is a string",
+    };
+
+    testVariables.push(var1, var2);
+    console.log(testVariables);
+
+    panel.webview.html = getWebviewContnet(testVariables, paths[0], paths[1]);
   });
 
   context.subscriptions.push(disposable, webview);
+}
+
+function getPaths(
+  panel: vscode.WebviewPanel,
+  context: vscode.ExtensionContext
+) {
+  const stylePath = vscode.Uri.file(
+    path.join(context.extensionPath, `src`, `webview`, `vendor`, `styles.css`)
+  );
+  const scriptPath = vscode.Uri.file(
+    path.join(context.extensionPath, `src`, `webview`, `vendor`, `script.js`)
+  );
+
+  const styles = panel.webview.asWebviewUri(stylePath);
+  const script = panel.webview.asWebviewUri(scriptPath);
+
+  return [styles, script];
 }
 
 // this method is called when your extension is deactivated

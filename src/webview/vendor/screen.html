@@ -1,13 +1,4 @@
-import * as vscode from "vscode";
-import { Variable } from "./types";
-
-export function getWebviewContnet(
-  variables: Variable[],
-  stylesheet: vscode.Uri,
-  script: vscode.Uri
-) {
-  return `
-	<!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8" />
@@ -20,6 +11,8 @@ export function getWebviewContnet(
 			<link rel="stylesheet" type="text/css" href="${stylesheet}">
     </head>
     <body>
+			<script>/* eslint-disable */
+			// createVariable(${variables});</script>
 			<section id="var-container" class="var-container">
 				<div class="var-container">
 					<div class="border">
@@ -59,5 +52,3 @@ export function getWebviewContnet(
 			</section>
     </body>
   </html>
-  `;
-}

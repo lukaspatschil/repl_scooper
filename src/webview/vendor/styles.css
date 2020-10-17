@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  padding: 1rem 1rem;
+}
+
+input {
+  background-color: var(--vscode-editor-background-color);
+  border: none;
+  border-width: 0;
+  color: var(--vscode-editor-foreground);
+  width: 4rem;
+}
+
+input:focus {
+  outline: none;
+  outline-width: 0;
+}
+
+button {
+  background-color: var(--vscode-editor-background-color);
+  border: none;
+  color: var(--vscode-button-foreground);
+  padding: 0 5px;
+  transition: transform 0.2s;
+}
+
+button:active {
+  transform: scale(1.5);
+}
+
+button:focus {
+  outline: none;
+  outline-width: 0;
+}
+
+.play {
+  color: var(--vscode-debugIcon-startForeground);
+}
+
+.reload {
+  color: var(--vscode-debugIcon-continueForeground);
+}
+
+.button-container {
+  float: right;
+}
+
+.border {
+  border: 0.5px solid var(--vscode-editor-foreground);
+}
+
+.var-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.var-lable {
+  font-weight: bold;
+  padding: 0 5px;
+}
