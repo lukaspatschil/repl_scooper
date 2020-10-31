@@ -26,7 +26,7 @@
     "vscode:prepublish": "yarn run compile",
     "compile": "npm-run-all compile:*",
     "lint": "eslint src --ext ts",
-    "watch": "yarn-run-all -p watch:*",
+    "watch": "npm-run-all -p watch:*",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./out/test/runTest.js",
     "compile:extension": "tsc -p ./",
@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-syntax-highlighter": "^15.3.0"
   }
 }

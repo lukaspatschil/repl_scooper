@@ -1,8 +1,14 @@
 import React from 'react';
-import Variable from './components/Variable';
+
+import Variables from './components/Variables';
+import Code from './components/Code';
+import { IVariable } from './model';
 
 export const App = () => {
-  const test = [
+  const codeString = `function add(num) {
+    return num + 1;
+  }`;
+  const testInput: IVariable[] = [
     {
       name: "x",
       value: "number"
@@ -13,10 +19,11 @@ export const App = () => {
   ];
 
   return (
-    <div>
-      <h1>Hello</h1>
-      {test.map(x => <Variable name={x.name} value={x.value} />)}
-    </div>
+    <React.Fragment>
+      <h1>REPL Scooper</h1>
+      <Variables variables={testInput} />
+      <Code code={codeString} />
+    </React.Fragment>
   );
 };
 

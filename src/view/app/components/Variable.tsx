@@ -1,11 +1,16 @@
-import { Variable } from "../model";
 import * as React from 'react';
 
-const Variable = ({ name, value }) => {
+import { IVariable } from '../model';
+
+const Variable = ({ name, value }: IVariable) => {
   return (
-    <div>
-      <label htmlFor="variable">{ name }</label>
-      <input name="variable" type="text" placeholder={ value ? value : "" }/>
+    <div className="var-container">
+      <div className="border">
+        <label className="var-lable" htmlFor="variable">{name}</label>
+      </div>
+      <div className="border">
+        <input name="variable" type="text" placeholder={value ? value : ""} />
+      </div>
     </div>
   );
 };
