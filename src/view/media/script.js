@@ -1,27 +1,17 @@
 window.addEventListener('load', (e) => {
-  const input = document.getElementById('in1');
-  const text = document.getElementById('text');
-
-  // addVariable();
-
-  const var1 = {
-    name: "test1"
-  };
-  const var2 = {
-    name: "test2"
-  };
-
-  const coll = [var1, var2, {name: "x"}, {name: "x"}, {name: "x"}];
+  const coll = [{name: "x"}, {name: "x"}, {name: "x"}];
 
   createVariable(coll);
   
-  input.onchange = e => {
-    text.innerHTML = e.target.value;
-  };
 });
+
+function test(varia) {
+  console.log(varia);
+}
 
 function createVariable(variables) {
   for(let variable of variables) {
+    console.log(variable);
     addVariable(variable);
   }
 }

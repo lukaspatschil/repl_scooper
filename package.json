@@ -10,40 +10,54 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:replcode.helloWorld"
+    "onCommand:extension.replcode"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "replcode.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "replcode.window",
-        "title": "Open REPL Window"
+        "command": "extension.replcode",
+        "title": "Open REPL Window",
+        "category": "REPL Scooper"
       }
     ]
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
-    "compile": "tsc -p ./",
+    "compile": "npm-run-all compile:*",
     "lint": "eslint src --ext ts",
-    "watch": "tsc -watch -p ./",
+    "watch": "yarn-run-all -p watch:*",
     "pretest": "yarn run compile && yarn run lint",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "compile:extension": "tsc -p ./",
+    "compile:views": "webpack --mode development",
+    "watch:extension": "tsc -watch -p ./",
+    "watch:views": "webpack --watch --mode development",
+    "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
-    "@types/vscode": "^1.48.0",
     "@types/glob": "^7.1.1",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.11.0",
-    "eslint": "^6.8.0",
-    "@typescript-eslint/parser": "^2.30.0",
+    "@types/react": "^16.9.55",
+    "@types/react-dom": "^16.9.9",
+    "@types/vscode": "^1.48.0",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "css-loader": "^5.0.0",
+    "eslint": "^6.8.0",
     "glob": "^7.1.6",
     "mocha": "^7.1.2",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.7",
     "typescript": "^3.8.3",
-    "vscode-test": "^1.3.0"
+    "vscode-test": "^1.3.0",
+    "webpack": "^5.3.2",
+    "webpack-cli": "^4.1.0",
+    "yarn-run-all": "^3.1.1"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   }
 }
