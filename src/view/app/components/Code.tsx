@@ -11,6 +11,6 @@ const Code = ({ code }) => {
       </SyntaxHighlighter>
     </React.Fragment>
   );
-}
+};
 
 export default Code;

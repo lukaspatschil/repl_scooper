@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Variable } from "./types";
+import { IVariable } from "./app/model";
 import * as path from "path";
 
 export default class ViewLoader {
@@ -31,6 +31,18 @@ export default class ViewLoader {
     );
     const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
+    const testInput: IVariable[] = [
+      {
+        name: "x",
+        value: "number",
+      },
+      {
+        name: "y",
+      },
+    ];
+
+    const input = "this is a string";
+
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -44,7 +56,8 @@ export default class ViewLoader {
                       script-src 'unsafe-eval' 'unsafe-inline' vscode-resource:;
 											style-src vscode-resource: 'unsafe-inline';">
 				<script>
-					window.acquireVsCodeApi = acquireVsCodeApi;
+          window.acquireVsCodeApi = acquireVsCodeApi;
+          window.initialData = ${input};
 				</script>
     </head>
     <body>
