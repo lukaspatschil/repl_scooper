@@ -1,6 +1,6 @@
 {
-  "name": "replcode",
-  "displayName": "REPLCode",
+  "name": "repl-scooper",
+  "displayName": "REPL Scooper",
   "description": "A methode to experiment with code snippets",
   "version": "0.0.1",
   "engines": {
@@ -10,13 +10,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.replcode"
+    "onCommand:extension.replscooper"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.replcode",
+        "command": "extension.replscooper",
         "title": "Open REPL Window",
         "category": "REPL Scooper"
       }

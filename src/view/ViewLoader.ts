@@ -39,9 +39,13 @@ export default class ViewLoader {
       {
         name: "y",
       },
+      {
+        name: "Lukas",
+        value: "working",
+      },
     ];
 
-    const input = "this is a string";
+    const stringInput = JSON.stringify(testInput);
 
     return `<!DOCTYPE html>
     <html lang="en">
@@ -57,7 +61,7 @@ export default class ViewLoader {
 											style-src vscode-resource: 'unsafe-inline';">
 				<script>
           window.acquireVsCodeApi = acquireVsCodeApi;
-          window.initialData = ${input};
+          window.initialData = ${stringInput};
 				</script>
     </head>
     <body>

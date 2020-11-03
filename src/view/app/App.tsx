@@ -4,27 +4,24 @@ import Variables from './components/Variables';
 import Code from './components/Code';
 import { IVariable } from './model';
 
-export const App = (props: any) => {
+type DataProps = {
+  vscode: any,
+  initialVariables: IVariable
+}
+
+export const App = ({ vscode, initialVariables }: DataProps) => {
+  //! This is a placeholder
   const codeString = `function add(num) {
     return num + 1;
   }`;
-  const testInput: IVariable[] = [
-    {
-      name: "x",
-      value: "number"
-    },
-    {
-      name: "y"
-    }
-  ];
+  //!
 
-  const [vscode, setVscode] = useState(props.vscode.getState());
-  const initialData = props.initalData;
+  // const [vscode, setVscode] = useState(props.vscode.getState());
 
   return (
     <React.Fragment>
       <h1>REPL Scooper</h1>
-      <Variables variables={testInput} />
+      <Variables variables={initialVariables} />
       <Code code={codeString} />
     </React.Fragment>
   );
