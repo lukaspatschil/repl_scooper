@@ -6,7 +6,7 @@ export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
   private readonly _extensionPath: string;
 
-  constructor(extensionPath: string) {
+  constructor(extensionPath: string, code: string) {
     this._extensionPath = extensionPath;
 
     this._panel = vscode.window.createWebviewPanel(
@@ -22,10 +22,10 @@ export default class ViewLoader {
       }
     );
 
-    this._panel.webview.html = this.getWebviewContent();
+    this._panel.webview.html = this.getWebviewContent(code);
   }
 
-  private getWebviewContent(): string {
+  private getWebviewContent(code: string): string {
     const reactAppPathOnDisk = vscode.Uri.file(
       path.join(this._extensionPath, "configViewer", "configViewer.js")
     );
@@ -46,6 +46,7 @@ export default class ViewLoader {
     ];
 
     const stringInput = JSON.stringify(testInput);
+    console.log(code);
 
     return `<!DOCTYPE html>
     <html lang="en">
@@ -62,6 +63,7 @@ export default class ViewLoader {
 				<script>
           window.acquireVsCodeApi = acquireVsCodeApi;
           window.initialData = ${stringInput};
+          window.code = ${code};
 				</script>
     </head>
     <body>

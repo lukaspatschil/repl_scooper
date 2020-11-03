@@ -17,7 +17,14 @@ export function activate(context: vscode.ExtensionContext) {
   // The commandId parameter must match the command field in package.json
 
   let webview = vscode.commands.registerCommand("extension.replscooper", () => {
-    const view = new ViewLoader(context.extensionPath);
+    const editor = vscode.window.activeTextEditor;
+
+    //! This is a placeholder
+    const position = editor?.selection;
+    const text = editor?.document.getText(position);
+
+    // TODO: undefined checks?
+    const view = new ViewLoader(context.extensionPath, text ? text : "");
   });
 
   context.subscriptions.push(webview);

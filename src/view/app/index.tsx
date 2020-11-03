@@ -9,14 +9,16 @@ declare global {
     interface Window {
         acquireVsCodeApi(): any;
         initialData: IVariable;
+        code: string;
     }
 }
 
 //? const vscode = window.acquireVsCodeApi();
 
 console.log(window.initialData);
+console.log(window.code);
 
 ReactDOM.render(
-    <App vscode="placeholder" initialVariables={window.initialData} />,
+    <App vscode="placeholder" initialVariables={window.initialData} code={window.code} />,
     document.getElementById('root')
 );
