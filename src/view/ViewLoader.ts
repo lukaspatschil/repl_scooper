@@ -46,7 +46,6 @@ export default class ViewLoader {
     ];
 
     const stringInput = JSON.stringify(testInput);
-    console.log(code);
 
     return `<!DOCTYPE html>
     <html lang="en">

@@ -6,18 +6,15 @@ import { IVariable } from './model';
 
 type DataProps = {
   vscode: any,
-  initialVariables: IVariable,
-  code: string
+  initialVariables: IVariable
 };
 
-export const App = ({ vscode, initialVariables, code }: DataProps) => {
+export const App = ({ vscode, initialVariables }: DataProps) => {
   //! This is a placeholder
   const codeString = `function add(num) {
     return num + 1;
   }`;
   //!
-
-  console.log(code);
 
   // const [vscode, setVscode] = useState(props.vscode.getState());
 
@@ -25,7 +22,7 @@ export const App = ({ vscode, initialVariables, code }: DataProps) => {
     <React.Fragment>
       <h1>REPL Scooper</h1>
       <Variables variables={initialVariables} />
-      <Code code={code} />
+      <Code code={codeString} />
     </React.Fragment>
   );
 };

@@ -13,12 +13,13 @@ declare global {
     }
 }
 
-//? const vscode = window.acquireVsCodeApi();
+const vscode = window.acquireVsCodeApi();
 
 console.log(window.initialData);
 console.log(window.code);
+console.log(vscode);
 
 ReactDOM.render(
-    <App vscode="placeholder" initialVariables={window.initialData} code={window.code} />,
+    <App vscode={vscode} initialVariables={window.initialData} />,
     document.getElementById('root')
 );
