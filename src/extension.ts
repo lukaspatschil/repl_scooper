@@ -3,15 +3,17 @@
 import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
 import * as path from "path";
-import { Variable } from "./view/types";
+import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
+// global parsing options
+const PARSE_OPTIONS: TSESTreeOptions = {
+  comment: false,
+  loc: true,
+  jsx: false,
+};
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "replcode" is now active!');
-
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
@@ -19,12 +21,39 @@ export function activate(context: vscode.ExtensionContext) {
   let webview = vscode.commands.registerCommand("extension.replscooper", () => {
     const editor = vscode.window.activeTextEditor;
 
-    //! This is a placeholder
-    const position = editor?.selection;
-    const text = editor?.document.getText(position);
+    // getting the cursor position from the user
+    const position = editor?.selection?.active;
+
+    // reading the whole file as a string
+    // TODO add validation and only allow js and ts
+    const source = editor?.document.getText();
+
+    // parse the source code
+    // TODO only if the input is valid (try catch?)
+    const program = parse(source ? source : "", PARSE_OPTIONS);
+
+    // console.log(position ? position : "No value");
+    // console.log(program);
+
+    // fix position, as vscode begins at 0, 0 and eslint alt 1,0
+    const user_line = position?.line ? position.line + 1 : -1;
+
+    let active_function;
+    for (let statment of program.body) {
+      if (
+        user_line >= statment.loc.start.line &&
+        user_line <= statment.loc.end.line
+      ) {
+        active_function = statment;
+      }
+    }
+
+    active_function
+      ? console.log(active_function)
+      : console.error("No code detected");
 
     // TODO: undefined checks?
-    const view = new ViewLoader(context.extensionPath, text ? text : "");
+    const view = new ViewLoader(context.extensionPath, active_function);
   });
 
   context.subscriptions.push(webview);
@@ -46,6 +75,8 @@ function getPaths(
 
   return { styles, script };
 }
+
+function parsing() {}
 
 // this method is called when your extension is deactivated
 export function deactivate() {}

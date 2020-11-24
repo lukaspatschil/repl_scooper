@@ -1,12 +1,11 @@
 import * as vscode from "vscode";
-import { IVariable } from "./app/model";
 import * as path from "path";
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
   private readonly _extensionPath: string;
 
-  constructor(extensionPath: string, code: string) {
+  constructor(extensionPath: string, code: ProgramStatment) {
     this._extensionPath = extensionPath;
 
     this._panel = vscode.window.createWebviewPanel(
@@ -31,21 +30,7 @@ export default class ViewLoader {
     );
     const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
-    const testInput: IVariable[] = [
-      {
-        name: "x",
-        value: "number",
-      },
-      {
-        name: "y",
-      },
-      {
-        name: "Lukas",
-        value: "working",
-      },
-    ];
-
-    const stringInput = JSON.stringify(testInput);
+    const string_code = JSON.stringify(code);
 
     return `<!DOCTYPE html>
     <html lang="en">
@@ -61,8 +46,7 @@ export default class ViewLoader {
 											style-src vscode-resource: 'unsafe-inline';">
 				<script>
           window.acquireVsCodeApi = acquireVsCodeApi;
-          window.initialData = ${stringInput};
-          window.code = ${code};
+          window.code = ${string_code};
 				</script>
     </head>
     <body>
