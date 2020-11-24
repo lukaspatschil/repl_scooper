@@ -7,7 +7,7 @@ const Code = ({ code }) => {
     <React.Fragment>
       <h2>Your current code:</h2>
       <SyntaxHighlighter language="javascript" style={ocean} showLineNumbers={true}>
-        {code && "this is a string"}
+        {code}
       </SyntaxHighlighter>
     </React.Fragment>
   );

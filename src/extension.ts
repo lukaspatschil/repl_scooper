@@ -48,12 +48,33 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
+    let range: vscode.Range;
+    let source_string: string | undefined;
+    if (active_function) {
+      range = new vscode.Range(
+        new vscode.Position(
+          active_function.loc.start.line - 1,
+          active_function.loc.start.column
+        ),
+        new vscode.Position(
+          active_function.loc.end.line - 1,
+          active_function.loc.end.column
+        )
+      );
+      source_string = editor?.document.getText(range);
+      console.info(source_string);
+    }
+
     active_function
       ? console.log(active_function)
       : console.error("No code detected");
 
     // TODO: undefined checks?
-    const view = new ViewLoader(context.extensionPath, active_function);
+    const view = new ViewLoader(
+      context.extensionPath,
+      active_function,
+      source_string ? source_string : ""
+    );
   });
 
   context.subscriptions.push(webview);

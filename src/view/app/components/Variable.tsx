@@ -7,7 +7,8 @@ const Variable = ({ name, typeAnnotation }) => {
         <label className="var-lable" htmlFor="variable">{name}</label>
       </div>
       <div className="border">
-        <input name="variable" type="text" placeholder={typeAnnotation ? get_type(typeAnnotation.typeAnnotation.type) : "any"} />
+        <input name="variable" type="text"
+          placeholder={typeAnnotation ? get_type(typeAnnotation.typeAnnotation.type) : "any"} />
       </div>
     </div>
   );

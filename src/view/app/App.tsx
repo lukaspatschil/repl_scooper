@@ -6,10 +6,11 @@ import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 
 type DataProps = {
   vscode: any,
-  code: ProgramStatment
+  code: ProgramStatment,
+  code_string: string
 };
 
-export const App = ({ vscode, code }: DataProps) => {
+export const App = ({ vscode, code, code_string }: DataProps) => {
   // const [vscode, setVscode] = useState(props.vscode.getState());
   let variables;
 
@@ -23,7 +24,7 @@ export const App = ({ vscode, code }: DataProps) => {
     <React.Fragment>
       <h1>REPL Scooper</h1>
       <Variables variables={variables} />
-      <Code code={code} />
+      <Code code={code_string} />
     </React.Fragment>
   );
 };
