@@ -16,6 +16,13 @@
 	},
 	"exclude": [
 		"node_modules",
-		".vscode-test"
+		".vscode-test",
+		"**/view/app/index.css",
+		"**/view/app/index.tsx",
+		"**/view/app/tsconfig.json",
+		"**/view/app/config.tsx",
+		"**/view/app/App.tsx",
+		"**/view/app/components/**",
+		"sum.ts"
 	]
 }
