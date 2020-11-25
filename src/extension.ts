@@ -32,9 +32,6 @@ export function activate(context: vscode.ExtensionContext) {
     // TODO only if the input is valid (try catch?)
     const program = parse(source ? source : "", PARSE_OPTIONS);
 
-    // console.log(position ? position : "No value");
-    // console.log(program);
-
     // fix position, as vscode begins at 0, 0 and eslint alt 1,0
     const user_line = position?.line ? position.line + 1 : -1;
 

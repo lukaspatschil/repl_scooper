@@ -15,7 +15,9 @@ export const App = ({ vscode, code, code_string }: DataProps) => {
   // const [vscode, setVscode] = useState(props.vscode.getState());
   const [result, setResult] = useState(undefined);
   const [variables, setVariables] = useState([]);
+  const [evalString, setEvalString] = useState(code_string);
 
+  //? is there a new function on every update?
   const updateValue = (value: any, name: string) => {
     // TODO make imutable
     const tmp = variables;
@@ -30,8 +32,9 @@ export const App = ({ vscode, code, code_string }: DataProps) => {
     } else if (code.type === "VariableDeclaration"
       && code.declarations[0].init.type === "ArrowFunctionExpression") {
       setVariables(code.declarations[0].init.params);
+      // setEvalString(code_string.substring());
+      console.log(evalString);
     }
-    console.log(variables);
   }, []);
 
   return (
@@ -57,8 +60,7 @@ export const App = ({ vscode, code, code_string }: DataProps) => {
 };
 
 const reflect = (code_string: string, input: any): any => {
-  //! this is a placeholder
-  let values = [];
+  const values = [];
   for (let item of input) {
     item.value ? values.push(item.value) : values.push(undefined);
   }

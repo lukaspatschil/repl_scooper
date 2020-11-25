@@ -12,19 +12,19 @@ const Variable = ({ name, typeAnnotation, updateValue }) => {
       </div>
       <div className="border">
         <input name="variable" type="text" onChange={(e) => handleChange(e.target.value)}
-          placeholder={typeAnnotation ? typeAnnotation.typeAnnotation.type : "any"} />
+          placeholder={typeAnnotation ? get_type(typeAnnotation.typeAnnotation.type) : "any"} />
       </div>
     </div>
   );
 };
 
 const convert_value = (value) => {
-  if (!Number.isNaN(Number(value))) {
-    return Number(value);
-  } else if (value === `true`) {
+  if (value === `true`) {
     return true;
   } else if (value === `flase`) {
     return false;
+  } else if (!Number.isNaN(Number(value))) {
+    return Number(value);
   } else {
     return value;
   }
@@ -39,7 +39,7 @@ const get_type = (ts_type) => {
     case "TSBooleanKeyword":
       return "boolean";
     default:
-      return "any";
+      return "unknown";
   }
 };
 
