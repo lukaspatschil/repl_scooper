@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import Variables from './components/Variables';
 import Code from './components/Code';
+import ts from 'typescript';
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import Variable from './components/Variable';
 
 type DataProps = {
   vscode: any,
@@ -12,21 +13,64 @@ type DataProps = {
 
 export const App = ({ vscode, code, code_string }: DataProps) => {
   // const [vscode, setVscode] = useState(props.vscode.getState());
-  let variables;
+  const [result, setResult] = useState(undefined);
+  const [variables, setVariables] = useState([]);
 
-  if (code.type === "FunctionDeclaration") {
-    variables = code.params;
-  } else if (code.type === "ArrowFunctionExpression") {
-    variables = code.declarations[0].init.params;
-  }
+  const updateValue = (value: any, name: string) => {
+    // TODO make imutable
+    const tmp = variables;
+    tmp[tmp.findIndex(el => el.name === name)].value = value;
+    // setVariables(tmp);
+  };
+
+  useEffect(() => {
+    // TODO add better validation
+    if (code.type === "FunctionDeclaration") {
+      setVariables(code.params);
+    } else if (code.type === "VariableDeclaration"
+      && code.declarations[0].init.type === "ArrowFunctionExpression") {
+      setVariables(code.declarations[0].init.params);
+    }
+    console.log(variables);
+  }, []);
 
   return (
     <React.Fragment>
       <h1>REPL Scooper</h1>
-      <Variables variables={variables} />
+      <div>
+        <h2>Controlls:</h2>
+        <input type="button" onClick={() => setResult(reflect(code_string, variables))} value="start" />
+        <input type="button" onClick={() => console.log("WIP")} value="reload" />
+      </div>
+      <div>
+        <h2>A list of all your variables: </h2>
+        {variables && variables.map((el) => <Variable key={el.name}
+          name={el.name} typeAnnotation={el.typeAnnotation} updateValue={updateValue} />)}
+      </div>
       <Code code={code_string} />
+      <div>
+        <h2>Result of your program:</h2>
+        <pre>{result}</pre>
+      </div>
     </React.Fragment>
   );
+};
+
+const reflect = (code_string: string, input: any): any => {
+  //! this is a placeholder
+  let values = [];
+  for (let item of input) {
+    item.value ? values.push(item.value) : values.push(undefined);
+  }
+
+  // const func = eval(`(${ts.transpile(code_string)})`);
+  const func = new Function('return ' + ts.transpile(code_string))();
+
+  try {
+    return Reflect.apply(func, undefined, values);
+  } catch (error) {
+    return error.toString();
+  }
 };
 
 export default App;
