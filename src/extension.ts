@@ -60,6 +60,10 @@ export function activate(context: vscode.ExtensionContext) {
       );
       source_string = editor?.document.getText(range);
       console.info(source_string);
+
+      if (editor) {
+        decorate(editor, range);
+      }
     }
 
     active_function
@@ -75,6 +79,14 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(webview);
+}
+
+const decorationType = vscode.window.createTextEditorDecorationType({
+  backgroundColor: "green",
+});
+
+function decorate(editor: vscode.TextEditor, range: vscode.Range) {
+  editor.setDecorations(decorationType, [range]);
 }
 
 function getPaths(
