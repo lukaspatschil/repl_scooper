@@ -4,6 +4,8 @@ import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
 import * as path from "path";
 import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
+import { generate } from "astring";
+
 // global parsing options
 const PARSE_OPTIONS: TSESTreeOptions = {
   comment: false,
@@ -35,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
     // fix position, as vscode begins at 0, 0 and eslint alt 1,0
     const user_line = position?.line ? position.line + 1 : -1;
 
+    // iterate over all the functions
     let active_function;
     for (let statment of program.body) {
       if (
@@ -45,6 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
+    // get the whole function
     let range: vscode.Range;
     let source_string: string | undefined;
     if (active_function) {
@@ -59,13 +63,13 @@ export function activate(context: vscode.ExtensionContext) {
         )
       );
       source_string = editor?.document.getText(range);
-      console.info(source_string);
 
       if (editor) {
         decorate(editor, range);
       }
     }
 
+    // log the function
     active_function
       ? console.log(active_function)
       : console.error("No code detected");

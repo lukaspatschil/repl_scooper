@@ -17,7 +17,6 @@ declare global {
 const vscode = window.acquireVsCodeApi();
 
 console.log(window.code);
-console.log(window.code_string);
 console.log(vscode);
 
 ReactDOM.render(
