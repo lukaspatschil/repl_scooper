@@ -42,7 +42,6 @@ export const App = ({ vscode, code, code_string }: DataProps) => {
       <h1>REPL Scooper</h1>
       <div>
         <h2>Controlls:</h2>
-        <input type="button" onClick={() => setResult(reflect(code, variables))} value="start" />
         <input type="button" onClick={() => console.log("WIP")} value="reload" />
       </div>
       <div>
@@ -53,7 +52,7 @@ export const App = ({ vscode, code, code_string }: DataProps) => {
       <Code code={code_string} />
       <div>
         <h2>Result of your program:</h2>
-        <pre>{result}</pre>
+        <p>{result}</p>
       </div>
     </React.Fragment>
   );
@@ -79,6 +78,7 @@ const reflect = (code: ProgramStatment, input: any): any => {
   try {
     return Reflect.apply(func, undefined, values);
   } catch (error) {
+    console.log(error);
     return error.toString();
 
   }

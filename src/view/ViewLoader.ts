@@ -4,9 +4,27 @@ import * as path from "path";
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
   private readonly _extensionPath: string;
+  private readonly activeDecorationType = vscode.window.createTextEditorDecorationType(
+    {
+      backgroundColor: new vscode.ThemeColor("editor.selectionBackground"),
+    }
+  );
+  private readonly deactiveDecorationType = vscode.window.createTextEditorDecorationType(
+    {
+      backgroundColor: new vscode.ThemeColor("editor.background"),
+    }
+  );
 
-  constructor(extensionPath: string, code: any, code_string: string) {
+  constructor(
+    extensionPath: string,
+    code: any,
+    code_string: string,
+    range: vscode.Range,
+    editor: vscode.TextEditor
+  ) {
     this._extensionPath = extensionPath;
+
+    this.decorate(editor, range, this.activeDecorationType);
 
     this._panel = vscode.window.createWebviewPanel(
       "replWebview",
@@ -22,6 +40,10 @@ export default class ViewLoader {
     );
 
     this._panel.webview.html = this.getWebviewContent(code, code_string);
+
+    this._panel.onDidDispose(() => {
+      this.decorate(editor, range, this.deactiveDecorationType);
+    });
   }
 
   private getWebviewContent(code: any, code_string: string): string {
@@ -57,5 +79,13 @@ export default class ViewLoader {
         <script src="${reactAppUri}"></script>
     </body>
     </html>`;
+  }
+
+  private decorate(
+    editor: vscode.TextEditor,
+    range: vscode.Range,
+    decoration: vscode.TextEditorDecorationType
+  ) {
+    editor.setDecorations(decoration, [range]);
   }
 }

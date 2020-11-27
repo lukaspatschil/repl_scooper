@@ -4,7 +4,8 @@ import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
 import * as path from "path";
 import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
-import { generate } from "astring";
+//@ts-ignore
+import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 
 // global parsing options
 const PARSE_OPTIONS: TSESTreeOptions = {
@@ -38,59 +39,27 @@ export function activate(context: vscode.ExtensionContext) {
     const user_line = position?.line ? position.line + 1 : -1;
 
     // iterate over all the functions
-    let active_function;
-    for (let statment of program.body) {
-      if (
-        user_line >= statment.loc.start.line &&
-        user_line <= statment.loc.end.line
-      ) {
-        active_function = statment;
-      }
-    }
+    const active_function = parser(program.body, user_line);
 
     // get the whole function
     let range: vscode.Range;
     let source_string: string | undefined;
-    if (active_function) {
-      range = new vscode.Range(
-        new vscode.Position(
-          active_function.loc.start.line - 1,
-          active_function.loc.start.column
-        ),
-        new vscode.Position(
-          active_function.loc.end.line - 1,
-          active_function.loc.end.column
-        )
-      );
+    if (active_function && editor) {
+      range = getRange(active_function);
       source_string = editor?.document.getText(range);
 
-      if (editor) {
-        decorate(editor, range);
-      }
+      // TODO: undefined checks?
+      const view = new ViewLoader(
+        context.extensionPath,
+        active_function,
+        source_string ? source_string : "",
+        range,
+        editor
+      );
     }
-
-    // log the function
-    active_function
-      ? console.log(active_function)
-      : console.error("No code detected");
-
-    // TODO: undefined checks?
-    const view = new ViewLoader(
-      context.extensionPath,
-      active_function,
-      source_string ? source_string : ""
-    );
   });
 
   context.subscriptions.push(webview);
-}
-
-const decorationType = vscode.window.createTextEditorDecorationType({
-  backgroundColor: "green",
-});
-
-function decorate(editor: vscode.TextEditor, range: vscode.Range) {
-  editor.setDecorations(decorationType, [range]);
 }
 
 function getPaths(
@@ -110,7 +79,29 @@ function getPaths(
   return { styles, script };
 }
 
-function parsing() {}
+function parser(program: ProgramStatment[], user_line: number): any {
+  for (let statment of program) {
+    if (
+      user_line >= statment.loc.start.line &&
+      user_line <= statment.loc.end.line
+    ) {
+      return statment;
+    }
+  }
+}
+
+function getRange(active_function: any): vscode.Range {
+  return new vscode.Range(
+    new vscode.Position(
+      active_function.loc.start.line - 1,
+      active_function.loc.start.column
+    ),
+    new vscode.Position(
+      active_function.loc.end.line - 1,
+      active_function.loc.end.column
+    )
+  );
+}
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
