@@ -6,6 +6,7 @@ import * as path from "path";
 import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import { stat } from "fs";
 
 // global parsing options
 const PARSE_OPTIONS: TSESTreeOptions = {
@@ -40,6 +41,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     // iterate over all the functions
     const active_function = parser(program.body, user_line);
+
+    //! change
+    // vscode.workspace.onDidChangeTextDocument((e) => {
+    //   const active_function = parser(program.body, user_line);
+    //   console.log(active_function);
+    // });
 
     // get the whole function
     let range: vscode.Range;
@@ -79,13 +86,28 @@ function getPaths(
   return { styles, script };
 }
 
-function parser(program: ProgramStatment[], user_line: number): any {
+function parser(
+  program: ProgramStatment[],
+  user_line: number
+): ProgramStatment | undefined {
   for (let statment of program) {
     if (
       user_line >= statment.loc.start.line &&
-      user_line <= statment.loc.end.line
+      user_line <= statment.loc.end.line &&
+      statment.type === "FunctionDeclaration"
     ) {
+      if (
+        statment.body !== undefined &&
+        statment.body.type === "BlockStatement"
+      ) {
+        const tmp = parser(statment.body.body, user_line);
+        if (tmp) {
+          return tmp;
+        }
+      }
       return statment;
+    } else {
+      return undefined;
     }
   }
 }
