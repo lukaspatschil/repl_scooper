@@ -3,8 +3,6 @@
 import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
 import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
-//@ts-ignore
-import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 import { parser, globalVariables, getRange } from "./utils";
 
 // global parsing options
