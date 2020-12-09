@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
+//@ts-ignore
+import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
@@ -9,15 +11,11 @@ export default class ViewLoader {
       backgroundColor: new vscode.ThemeColor("editor.selectionBackground"),
     }
   );
-  private readonly deactiveDecorationType = vscode.window.createTextEditorDecorationType(
-    {
-      backgroundColor: new vscode.ThemeColor("editor.background"),
-    }
-  );
 
   constructor(
     extensionPath: string,
-    code: any,
+    code: ProgramStatment,
+    global_variables: ProgramStatment[],
     code_string: string,
     range: vscode.Range,
     editor: vscode.TextEditor
@@ -39,20 +37,29 @@ export default class ViewLoader {
       }
     );
 
-    this._panel.webview.html = this.getWebviewContent(code, code_string);
+    this._panel.webview.html = this.getWebviewContent(
+      code,
+      global_variables,
+      code_string
+    );
 
     this._panel.onDidDispose(() => {
-      this.decorate(editor, range, this.deactiveDecorationType);
+      this.activeDecorationType.dispose();
     });
   }
 
-  private getWebviewContent(code: any, code_string: string): string {
+  private getWebviewContent(
+    code: ProgramStatment,
+    global_variables: ProgramStatment[],
+    code_string: string
+  ): string {
     const reactAppPathOnDisk = vscode.Uri.file(
       path.join(this._extensionPath, "configViewer", "configViewer.js")
     );
     const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
     const string_code = JSON.stringify(code);
+    const string_global = JSON.stringify(global_variables);
     const more_string = JSON.stringify(code_string);
 
     return `<!DOCTYPE html>
@@ -70,6 +77,7 @@ export default class ViewLoader {
 				<script>
           window.acquireVsCodeApi = acquireVsCodeApi;
           window.code = ${string_code};
+          window.global_variables = ${string_global};
           window.code_string = ${more_string};
 				</script>
     </head>

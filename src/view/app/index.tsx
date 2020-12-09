@@ -10,6 +10,7 @@ declare global {
     interface Window {
         acquireVsCodeApi(): any;
         code: ProgramStatment;
+        global_variables: ProgramStatment[];
         code_string: string;
     }
 }
@@ -20,6 +21,6 @@ console.log(window.code);
 console.log(vscode);
 
 ReactDOM.render(
-    <App vscode={vscode} code={window.code} code_string={window.code_string} />,
+    <App vscode={vscode} code={window.code} global_variables={window.global_variables} code_string={window.code_string} />,
     document.getElementById('root')
 );
