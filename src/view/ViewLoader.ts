@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import { getRange } from "../utils";
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
@@ -17,12 +18,15 @@ export default class ViewLoader {
     code: ProgramStatment,
     global_variables: ProgramStatment[],
     code_string: string,
-    range: vscode.Range,
     editor: vscode.TextEditor
   ) {
     this._extensionPath = extensionPath;
 
-    this.decorate(editor, range, this.activeDecorationType);
+    const ranges: vscode.Range[] = [getRange(code)];
+    for (let statment of global_variables) {
+      ranges.push(getRange(statment));
+    }
+    this.decorate(editor, ranges, this.activeDecorationType);
 
     this._panel = vscode.window.createWebviewPanel(
       "replWebview",
@@ -58,10 +62,6 @@ export default class ViewLoader {
     );
     const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
 
-    const string_code = JSON.stringify(code);
-    const string_global = JSON.stringify(global_variables);
-    const more_string = JSON.stringify(code_string);
-
     return `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -76,9 +76,9 @@ export default class ViewLoader {
 											style-src vscode-resource: 'unsafe-inline';">
 				<script>
           window.acquireVsCodeApi = acquireVsCodeApi;
-          window.code = ${string_code};
-          window.global_variables = ${string_global};
-          window.code_string = ${more_string};
+          window.code = ${JSON.stringify(code)};
+          window.global_variables = ${JSON.stringify(global_variables)};
+          window.code_string = ${JSON.stringify(code_string)};
 				</script>
     </head>
     <body>
@@ -91,9 +91,9 @@ export default class ViewLoader {
 
   private decorate(
     editor: vscode.TextEditor,
-    range: vscode.Range,
+    range: vscode.Range[],
     decoration: vscode.TextEditorDecorationType
   ) {
-    editor.setDecorations(decoration, [range]);
+    editor.setDecorations(decoration, range);
   }
 }

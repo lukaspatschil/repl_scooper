@@ -2,10 +2,10 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
-import * as path from "path";
 import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import { parser, globalVariables, getRange } from "./utils";
 
 // global parsing options
 const PARSE_OPTIONS: TSESTreeOptions = {
@@ -61,7 +61,6 @@ export function activate(context: vscode.ExtensionContext) {
         active_function,
         global_variables,
         source_string ? source_string : "",
-        range,
         editor
       );
     } else {
@@ -72,83 +71,6 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(webview);
-}
-
-function getPaths(
-  panel: vscode.WebviewPanel,
-  context: vscode.ExtensionContext
-) {
-  const stylePath = vscode.Uri.file(
-    path.join(context.extensionPath, `src`, `webview`, `media`, `styles.css`)
-  );
-  const scriptPath = vscode.Uri.file(
-    path.join(context.extensionPath, `src`, `webview`, `media`, `script.js`)
-  );
-
-  const styles = panel.webview.asWebviewUri(stylePath);
-  const script = panel.webview.asWebviewUri(scriptPath);
-
-  return { styles, script };
-}
-
-function parser(
-  program: ProgramStatment[],
-  user_line: number
-): ProgramStatment | undefined {
-  for (const statment of program) {
-    if (
-      user_line >= statment.loc.start.line &&
-      user_line <= statment.loc.end.line
-    ) {
-      if (statment.type === "FunctionDeclaration") {
-        if (
-          statment.body !== undefined &&
-          statment.body.type === "BlockStatement"
-        ) {
-          const tmp = parser(statment.body.body, user_line);
-          if (tmp) {
-            return tmp;
-          }
-        }
-        return statment;
-      } else {
-        return undefined;
-      }
-    }
-  }
-}
-
-function globalVariables(
-  program: ProgramStatment[],
-  user_line: number
-): ProgramStatment[] {
-  const variables: ProgramStatment[] = [];
-
-  for (const statemnt of program) {
-    if (
-      user_line >= statemnt.loc.start.line &&
-      statemnt.type === "VariableDeclaration"
-    ) {
-      variables.push(statemnt);
-    }
-  }
-
-  console.log(variables);
-
-  return variables;
-}
-
-function getRange(active_function: any): vscode.Range {
-  return new vscode.Range(
-    new vscode.Position(
-      active_function.loc.start.line - 1,
-      active_function.loc.start.column
-    ),
-    new vscode.Position(
-      active_function.loc.end.line - 1,
-      active_function.loc.end.column
-    )
-  );
 }
 
 // this method is called when your extension is deactivated
