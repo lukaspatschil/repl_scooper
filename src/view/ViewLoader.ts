@@ -1,68 +1,87 @@
-import * as vscode from "vscode";
-import * as path from "path";
+import * as vscode from 'vscode';
+import * as path from 'path';
 //@ts-ignore
-import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
-import { getRange } from "../utils";
+import { ProgramStatment } from '@typescript-eslint/eslint-plugin';
+import { getRange } from '../utils';
+import { getOriginalNode } from 'typescript';
 
 export default class ViewLoader {
-  private readonly _panel: vscode.WebviewPanel | undefined;
-  private readonly _extensionPath: string;
-  private readonly activeDecorationType = vscode.window.createTextEditorDecorationType(
-    {
-      backgroundColor: new vscode.ThemeColor("editor.selectionBackground"),
-    }
-  );
+	private readonly _panel: vscode.WebviewPanel | undefined;
+	private readonly _extensionPath: string;
+	private readonly activeDecorationType = vscode.window.createTextEditorDecorationType(
+		{
+			backgroundColor: new vscode.ThemeColor(
+				'editor.selectionBackground'
+			),
+		}
+	);
 
-  constructor(
-    extensionPath: string,
-    code: ProgramStatment,
-    global_variables: ProgramStatment[],
-    code_string: string,
-    editor: vscode.TextEditor
-  ) {
-    this._extensionPath = extensionPath;
+	constructor(
+		extensionPath: string,
+		code: ProgramStatment,
+		global_variables: ProgramStatment[],
+		code_string: string,
+		editor: vscode.TextEditor
+	) {
+		this._extensionPath = extensionPath;
 
-    const ranges: vscode.Range[] = [getRange(code)];
-    for (let statment of global_variables) {
-      ranges.push(getRange(statment));
-    }
-    this.decorate(editor, ranges, this.activeDecorationType);
+		const ranges: vscode.Range[] = [getRange(code)];
+		for (let statment of global_variables) {
+			ranges.push(getRange(statment));
+		}
+		this.decorate(editor, ranges, this.activeDecorationType);
 
-    this._panel = vscode.window.createWebviewPanel(
-      "replWebview",
-      "REPL Window",
-      vscode.ViewColumn.Beside,
-      {
-        enableScripts: true,
+		this._panel = vscode.window.createWebviewPanel(
+			'replWebview',
+			'REPL Window',
+			vscode.ViewColumn.Beside,
+			{
+				enableScripts: true,
 
-        localResourceRoots: [
-          vscode.Uri.file(path.join(extensionPath, "configViewer")),
-        ],
-      }
-    );
+				localResourceRoots: [
+					vscode.Uri.file(path.join(extensionPath, 'configViewer')),
+				],
+			}
+		);
 
-    this._panel.webview.html = this.getWebviewContent(
-      code,
-      global_variables,
-      code_string
-    );
+		this._panel.webview.html = this.getWebviewContent(
+			code,
+			global_variables,
+			code_string
+		);
 
-    this._panel.onDidDispose(() => {
-      this.activeDecorationType.dispose();
-    });
-  }
+		this._panel.onDidDispose(() => {
+			this.activeDecorationType.dispose();
+		});
+	}
 
-  private getWebviewContent(
-    code: ProgramStatment,
-    global_variables: ProgramStatment[],
-    code_string: string
-  ): string {
-    const reactAppPathOnDisk = vscode.Uri.file(
-      path.join(this._extensionPath, "configViewer", "configViewer.js")
-    );
-    const reactAppUri = reactAppPathOnDisk.with({ scheme: "vscode-resource" });
+	updateWebviewContent(
+		code: ProgramStatment,
+		global_variables: ProgramStatment[],
+		code_string: string
+	) {
+		if (this._panel) {
+			this._panel.webview.html = this.getWebviewContent(
+				code,
+				global_variables,
+				code_string
+			);
+		}
+	}
 
-    return `<!DOCTYPE html>
+	private getWebviewContent(
+		code: ProgramStatment,
+		global_variables: ProgramStatment[],
+		code_string: string
+	): string {
+		const reactAppPathOnDisk = vscode.Uri.file(
+			path.join(this._extensionPath, 'configViewer', 'configViewer.js')
+		);
+		const reactAppUri = reactAppPathOnDisk.with({
+			scheme: 'vscode-resource',
+		});
+
+		return `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -87,13 +106,13 @@ export default class ViewLoader {
         <script src="${reactAppUri}"></script>
     </body>
     </html>`;
-  }
+	}
 
-  private decorate(
-    editor: vscode.TextEditor,
-    range: vscode.Range[],
-    decoration: vscode.TextEditorDecorationType
-  ) {
-    editor.setDecorations(decoration, range);
-  }
+	private decorate(
+		editor: vscode.TextEditor,
+		range: vscode.Range[],
+		decoration: vscode.TextEditorDecorationType
+	) {
+		editor.setDecorations(decoration, range);
+	}
 }
