@@ -46,6 +46,9 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
       && code.declarations[0].init.type === "ArrowFunctionExpression") {
       setVariables(code.declarations[0].init.params);
     }
+
+    let oldState = vscode.getState();
+    console.log(oldState);
   }, []);
 
   return (
