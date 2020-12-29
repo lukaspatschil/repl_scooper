@@ -3,7 +3,12 @@
 import * as vscode from 'vscode';
 import ViewLoader from './view/ViewLoader';
 import { parse, TSESTreeOptions } from '@typescript-eslint/typescript-estree';
-import { parser, globalVariables, getRange } from './utils';
+import {
+	parserFunction,
+	parserCommands,
+	globalVariables,
+	getRange,
+} from './utils';
 
 // global parsing options
 const PARSE_OPTIONS: TSESTreeOptions = {
@@ -39,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const user_line = position?.line ? position.line + 1 : -1;
 
 			// iterate over all the functions
-			let active_function = parser(program.body, user_line);
+			let active_function = parserFunction(program.body, user_line);
 			let global_variables = globalVariables(program.body, user_line);
 
 			// get the whole function
@@ -64,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
 						new_source ? new_source : '',
 						PARSE_OPTIONS
 					);
-					const new_active_function = parser(
+					const new_active_function = parserFunction(
 						new_program.body,
 						user_line
 					);
@@ -90,7 +95,31 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	);
 
+	let commandview = vscode.commands.registerCommand(
+		'extension.replcommand',
+		() => {
+			const editor = vscode.window.activeTextEditor;
+
+			// getting the cursor position from the user
+			const position = editor?.selection?.active;
+
+			// reading the whole file as a string
+			// TODO add validation and only allow js and ts
+			const source = editor?.document.getText();
+
+			// parse the source code
+			// TODO only if the input is valid (try catch?)
+			let program = parse(source ? source : '', PARSE_OPTIONS);
+
+			// fix position, as vscode begins at 0, 0 and eslint alt 1,0
+			const user_line = position?.line ? position.line + 1 : -1;
+
+			console.log(program);
+		}
+	);
+
 	context.subscriptions.push(webview);
+	context.subscriptions.push(commandview);
 }
 
 // this method is called when your extension is deactivated

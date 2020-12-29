@@ -26,7 +26,7 @@ export function getPaths(
 	return { styles, script };
 }
 
-export function parser(
+export function parserFunction(
 	program: ProgramStatment[],
 	user_line: number
 ): ProgramStatment | undefined {
@@ -40,7 +40,7 @@ export function parser(
 					statment.body !== undefined &&
 					statment.body.type === 'BlockStatement'
 				) {
-					const tmp = parser(statment.body.body, user_line);
+					const tmp = parserFunction(statment.body.body, user_line);
 					if (tmp) {
 						return tmp;
 					}
@@ -51,6 +51,13 @@ export function parser(
 			}
 		}
 	}
+}
+
+export function parserCommands(
+	program: ProgramStatment[],
+	user_line: number
+): ProgramStatment | undefined {
+	return undefined;
 }
 
 export function globalVariables(
