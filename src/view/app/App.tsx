@@ -5,6 +5,7 @@ import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 import { transpile } from 'typescript';
 import Variable from './components/Variable';
 import { generate } from "astring";
+import Variables from './components/Variables';
 
 type DataProps = {
   vscode: any,
@@ -60,9 +61,11 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
           name={el.declarations[0].id.name} typeAnnotation={el.declarations[0].id.typeAnnotation} updateValue={updateGvalue} />)}
       </div>
       <div>
-        <h2>A list of all your function: </h2>
-        {variables && variables.map((el) => <Variable key={el.name}
-          name={el.name} typeAnnotation={el.typeAnnotation} updateValue={updateValue} />)}
+        <h2>A list of all your function variables:</h2>
+        <button>add set</button>
+        <Variables variables={variables} updateValue={updateValue} identifier="1" />
+        <Variables variables={variables} updateValue={updateValue} identifier="2" />
+
       </div>
       <Code code={code_string} />
       <div>
