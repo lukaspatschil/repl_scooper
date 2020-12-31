@@ -12,7 +12,7 @@ const Variable = ({ name, typeAnnotation, updateValue }) => {
       </div>
       <div className="border">
         <input name="variable" type="text" onChange={(e) => handleChange(e.target.value)}
-          placeholder={typeAnnotation ? get_type(typeAnnotation.typeAnnotation.type) : "any"} />
+          placeholder={typeAnnotation ? get_type(typeAnnotation?.typeAnnotation?.type) : "any"} />
       </div>
     </div>
   );

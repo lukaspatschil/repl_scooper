@@ -6,6 +6,7 @@ import { transpile } from 'typescript';
 import Variable from './components/Variable';
 import { generate } from "astring";
 import Variables from './components/Variables';
+import { IDataSet, IVariable } from "./types/types";
 
 type DataProps = {
   vscode: any,
@@ -19,12 +20,15 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
   const [result, setResult] = useState(undefined);
   const [variables, setVariables] = useState([]);
   const [gvariables, setGvariables] = useState([]);
+  const [dataset, setDataset] = useState<IDataSet[]>([]);
 
   //? is there a new function on every update?
-  const updateValue = (value: any, name: string) => {
+  const updateValue = (values: IVariable[]) => {
     // TODO make imutable
     const tmp = variables;
-    tmp[tmp.findIndex(el => el.name === name)].value = value;
+    for (let value of values) {
+      tmp[tmp.findIndex(el => el.name === value.name)].value = value.value;
+    }
     setResult(reflect(code, variables, gvariables));
     // setVariables(tmp);
   };
@@ -38,10 +42,16 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
     // setVariables(tmp);
   };
 
+  const addDataSet = () => {
+    const something = parseParams(code.params);
+    setDataset(el => [...el, { variables: something } as IDataSet]);
+  }
+
   useEffect(() => {
     // TODO add better validation
     if (code.type === "FunctionDeclaration") {
       setVariables(code.params);
+      console.log(code.params);
       setGvariables(global_variables);
     } else if (code.type === "VariableDeclaration"
       && code.declarations[0].init.type === "ArrowFunctionExpression") {
@@ -50,6 +60,7 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
 
     let oldState = vscode.getState();
     console.log(oldState);
+    addDataSet();
   }, []);
 
   return (
@@ -62,9 +73,10 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
       </div>
       <div>
         <h2>A list of all your function variables:</h2>
-        <button>add set</button>
-        <Variables variables={variables} updateValue={updateValue} identifier="1" />
-        <Variables variables={variables} updateValue={updateValue} identifier="2" />
+        <button onClick={addDataSet}>add set</button>
+        {
+          dataset.map((el, id) => <Variables variables={el.variables} updateValues={updateValue} identifier={id} key={id} />)
+        }
 
       </div>
       <Code code={code_string} />
@@ -105,6 +117,17 @@ const reflect = (code: ProgramStatment, input: any, global_scope: any): any => {
     return error.toString();
 
   }
+};
+
+const parseParams = (params) => {
+  let dataset: IVariable[] = [];
+
+  for (let variable of params) {
+    dataset = [...dataset, { name: variable.name } as IVariable];
+  }
+
+  console.log(dataset);
+  return dataset;
 };
 
 export default App;
