@@ -45,7 +45,7 @@ export const App = ({ vscode, code, global_variables, code_string }: IDataProps)
   const addDataSet = () => {
     const something = parseParams(code.params);
     setDataset(el => [...el, { variables: something } as IDataSet]);
-  }
+  };
 
   useEffect(() => {
     // TODO add better validation

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const Variable = ({ name, typeAnnotation, updateValue }) => {
-  const handleChange = (value) => {
+  const handleChange = (value: string) => {
     updateValue(convert_value(value), name);
   };
 
@@ -18,7 +18,7 @@ const Variable = ({ name, typeAnnotation, updateValue }) => {
   );
 };
 
-const convert_value = (value) => {
+const convert_value = (value: string) => {
   if (value === `true`) {
     return true;
   } else if (value === `flase`) {
