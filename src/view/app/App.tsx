@@ -8,14 +8,14 @@ import { generate } from "astring";
 import Variables from './components/Variables';
 import { IDataSet, IVariable } from "./types/types";
 
-type DataProps = {
+type IDataProps = {
   vscode: any,
   code: ProgramStatment,
   global_variables: ProgramStatment[],
   code_string: string
 };
 
-export const App = ({ vscode, code, global_variables, code_string }: DataProps) => {
+export const App = ({ vscode, code, global_variables, code_string }: IDataProps) => {
   // const [vscode, setVscode] = useState(props.vscode.getState());
   const [result, setResult] = useState(undefined);
   const [variables, setVariables] = useState([]);
