@@ -5,30 +5,35 @@ import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 import { transpile } from 'typescript';
 import Variable from './components/Variable';
 import { generate } from "astring";
+import Variables from './components/Variables';
+import { IDataSet, IVariable } from "./types/types";
 
-type DataProps = {
+type IDataProps = {
   vscode: any,
   code: ProgramStatment,
   global_variables: ProgramStatment[],
   code_string: string
 };
 
-export const App = ({ vscode, code, global_variables, code_string }: DataProps) => {
+export const App = ({ vscode, code, global_variables, code_string }: IDataProps) => {
   // const [vscode, setVscode] = useState(props.vscode.getState());
   const [result, setResult] = useState(undefined);
   const [variables, setVariables] = useState([]);
   const [gvariables, setGvariables] = useState([]);
+  const [dataset, setDataset] = useState<IDataSet[]>([]);
 
   //? is there a new function on every update?
-  const updateValue = (value: any, name: string) => {
+  const updateValue = (values: IVariable[]) => {
     // TODO make imutable
     const tmp = variables;
-    tmp[tmp.findIndex(el => el.name === name)].value = value;
+    for (let value of values) {
+      tmp[tmp.findIndex(el => el.name === value.name)].value = value.value;
+    }
     setResult(reflect(code, variables, gvariables));
     // setVariables(tmp);
   };
 
-  const updateGvalue = (value: any, name: string) => {
+  const updateGvalue = (value: string | number | boolean, name: string) => {
     // TODO make imutable
     const tmp = gvariables;
     tmp[tmp.findIndex(el => el.declarations[0].id.name === name)].declarations[0].init.value = value;
@@ -37,10 +42,16 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
     // setVariables(tmp);
   };
 
+  const addDataSet = () => {
+    const something = parseParams(code.params);
+    setDataset(el => [...el, { variables: something } as IDataSet]);
+  };
+
   useEffect(() => {
     // TODO add better validation
     if (code.type === "FunctionDeclaration") {
       setVariables(code.params);
+      console.log(code.params);
       setGvariables(global_variables);
     } else if (code.type === "VariableDeclaration"
       && code.declarations[0].init.type === "ArrowFunctionExpression") {
@@ -49,6 +60,7 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
 
     let oldState = vscode.getState();
     console.log(oldState);
+    addDataSet();
   }, []);
 
   return (
@@ -56,13 +68,19 @@ export const App = ({ vscode, code, global_variables, code_string }: DataProps) 
       <h1>REPL Scooper</h1>
       <div>
         <h2>A list of all your global: </h2>
-        {variables && gvariables.map((el) => <Variable key={el.declarations[0].id.name}
-          name={el.declarations[0].id.name} typeAnnotation={el.declarations[0].id.typeAnnotation} updateValue={updateGvalue} />)}
+        {gvariables && gvariables.map((el) => {
+          if (el.type === 'VariableDeclaration') {
+            return (<Variable key={el.declarations[0].id.name} name={el.declarations[0].id.name} typeAnnotation={el.declarations[0].id.typeAnnotation} updateValue={updateGvalue} />);
+          }
+        })}
       </div>
       <div>
-        <h2>A list of all your function: </h2>
-        {variables && variables.map((el) => <Variable key={el.name}
-          name={el.name} typeAnnotation={el.typeAnnotation} updateValue={updateValue} />)}
+        <h2>A list of all your function variables:</h2>
+        <button onClick={addDataSet}>add set</button>
+        {
+          dataset.map((el, id) => <Variables variables={el.variables} updateValues={updateValue} identifier={id} key={id} />)
+        }
+
       </div>
       <Code code={code_string} />
       <div>
@@ -93,7 +111,10 @@ const reflect = (code: ProgramStatment, input: any, global_scope: any): any => {
     globalstring += generate(item);
   }
 
+  console.log(global_scope);
+
   const func = new Function(transpile(globalstring) + 'return ' + transpile(code_string))();
+  console.log(func);
 
   try {
     return Reflect.apply(func, undefined, values);
@@ -102,6 +123,17 @@ const reflect = (code: ProgramStatment, input: any, global_scope: any): any => {
     return error.toString();
 
   }
+};
+
+const parseParams = (params) => {
+  let dataset: IVariable[] = [];
+
+  for (let variable of params) {
+    dataset = [...dataset, { name: variable.name } as IVariable];
+  }
+
+  console.log(dataset);
+  return dataset;
 };
 
 export default App;
