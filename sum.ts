@@ -26,7 +26,7 @@ const multi = (a: number, b: number) => {
 };
 
 function name1(params: number) {
-  return null;
+  return sum(1, 2, 3);
 }
 
 const asd = "123";

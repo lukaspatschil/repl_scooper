@@ -1,6 +1,6 @@
 export interface IVariable {
   name: string;
-  value: any;
+  value: string | number | boolean;
 }
 
 export interface IDataSet {

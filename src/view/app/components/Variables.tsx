@@ -27,7 +27,7 @@ const Variables = ({ variables, updateValues, identifier }: IPropsVariables) => 
 
   return <React.Fragment>
     <label htmlFor={`variables-${identifier}`}>
-      <input ref={inputRef} onClick={dosomething} type="radio" checked={identifier === 0 ? true : false}
+      <input ref={inputRef} onClick={dosomething} type="radio" defaultChecked={identifier === 0 ? true : false}
         name="vars" id={`variables-${identifier}`} value={`variables-${identifier}`} />
       {
         values.map((el) => <Variable key={el.name}

@@ -33,7 +33,7 @@ export const App = ({ vscode, code, global_variables, code_string }: IDataProps)
     // setVariables(tmp);
   };
 
-  const updateGvalue = (value: any, name: string) => {
+  const updateGvalue = (value: string | number | boolean, name: string) => {
     // TODO make imutable
     const tmp = gvariables;
     tmp[tmp.findIndex(el => el.declarations[0].id.name === name)].declarations[0].init.value = value;
@@ -68,8 +68,11 @@ export const App = ({ vscode, code, global_variables, code_string }: IDataProps)
       <h1>REPL Scooper</h1>
       <div>
         <h2>A list of all your global: </h2>
-        {variables && gvariables.map((el) => <Variable key={el.declarations[0].id.name}
-          name={el.declarations[0].id.name} typeAnnotation={el.declarations[0].id.typeAnnotation} updateValue={updateGvalue} />)}
+        {gvariables && gvariables.map((el) => {
+          if (el.type === 'VariableDeclaration') {
+            return (<Variable key={el.declarations[0].id.name} name={el.declarations[0].id.name} typeAnnotation={el.declarations[0].id.typeAnnotation} updateValue={updateGvalue} />);
+          }
+        })}
       </div>
       <div>
         <h2>A list of all your function variables:</h2>
@@ -108,7 +111,10 @@ const reflect = (code: ProgramStatment, input: any, global_scope: any): any => {
     globalstring += generate(item);
   }
 
+  console.log(global_scope);
+
   const func = new Function(transpile(globalstring) + 'return ' + transpile(code_string))();
+  console.log(func);
 
   try {
     return Reflect.apply(func, undefined, values);
