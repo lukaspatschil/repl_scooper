@@ -71,6 +71,8 @@ export const App = ({ vscode, code, global_variables, code_string }: IDataProps)
         {gvariables && gvariables.map((el) => {
           if (el.type === 'VariableDeclaration') {
             return (<Variable key={el.declarations[0].id.name} name={el.declarations[0].id.name} typeAnnotation={el.declarations[0].id.typeAnnotation} updateValue={updateGvalue} />);
+          } else {
+            return <React.Fragment />;
           }
         })}
       </div>
