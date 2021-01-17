@@ -15,12 +15,9 @@ declare global {
     }
 }
 
-const vscode = window.acquireVsCodeApi();
-
-console.log(window.code);
-console.log(vscode);
+console.log(tsvscode);
 
 ReactDOM.render(
-    <App vscode={vscode} code={window.code} global_variables={window.global_variables} code_string={window.code_string} />,
+    <App code={window.code} global_variables={window.global_variables} code_string={window.code_string} />,
     document.getElementById('root')
 );

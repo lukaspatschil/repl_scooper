@@ -88,7 +88,7 @@ export default class ViewLoader {
                       script-src 'unsafe-eval' 'unsafe-inline' vscode-resource:;
 											style-src vscode-resource: 'unsafe-inline';">
 				<script>
-          window.acquireVsCodeApi = acquireVsCodeApi;
+          const tsvscode = acquireVsCodeApi();
           window.code = ${JSON.stringify(code)};
           window.global_variables = ${JSON.stringify(global_variables)};
           window.code_string = ${JSON.stringify(code_string)};

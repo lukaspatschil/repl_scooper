@@ -38,19 +38,21 @@
     "compile:extension": "tsc -p ./",
     "compile:views": "webpack --mode development",
     "watch:extension": "tsc -watch -p ./",
-    "watch:views": "webpack --watch --mode development",
-    "postinstall": "rm -rf node_modules/@types/eslint-scope/node_modules"
+    "watch:views": "webpack --watch --mode development"
   },
   "devDependencies": {
-    "@types/eslint": "^7.2.5",
-    "@types/glob": "^7.1.1",
+    "@babel/plugin-transform-arrow-functions": "^7.12.1",
+    "@babel/plugin-transform-classes": "^7.12.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "@babel/plugin-transform-typescript": "^7.12.1",
+    "@types/babel__core": "^7.1.12",
+    "@types/babel__generator": "^7.6.2",
+    "@types/babel__parser": "^7.1.1",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.11.0",
+    "@types/node": "^14.14.20",
     "@types/react": "^16.9.55",
     "@types/react-dom": "^16.9.9",
     "@types/vscode": "^1.48.0",
-    "@typescript-eslint/eslint-plugin": "^4.8.2",
-    "@typescript-eslint/parser": "^4.8.2",
     "css-loader": "^5.0.0",
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
@@ -64,8 +66,10 @@
     "yarn-run-all": "^3.1.1"
   },
   "dependencies": {
-    "@typescript-eslint/typescript-estree": "^4.8.2",
-    "astring": "^1.4.3",
+    "@babel/core": "^7.12.10",
+    "@babel/generator": "^7.12.11",
+    "@babel/parser": "^7.12.11",
+    "astring": "^1.6.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-syntax-highlighter": "^15.3.0"

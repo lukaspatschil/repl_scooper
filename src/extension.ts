@@ -2,20 +2,15 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
-import { parse, TSESTreeOptions } from "@typescript-eslint/typescript-estree";
+import { transformSync } from "@babel/core";
+import { parse } from "@babel/parser";
+import generate from "@babel/generator";
 import {
   parserFunction,
   parserCommands,
   globalVariables,
   getRange,
 } from "./utils";
-
-// global parsing options
-const PARSE_OPTIONS: TSESTreeOptions = {
-  comment: false,
-  loc: true,
-  jsx: false,
-};
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -36,14 +31,18 @@ export function activate(context: vscode.ExtensionContext) {
 
     // parse the source code
     // TODO only if the input is valid (try catch?)
-    let program = parse(source ? source : "", PARSE_OPTIONS);
+    const program = parse(source ? source : "", {
+      allowImportExportEverywhere: true,
+      allowAwaitOutsideFunction: true,
+      plugins: ["typescript"],
+    });
 
     // fix position, as vscode begins at 0, 0 and eslint alt 1, 0
     const user_line = position?.line ? position.line + 1 : -1;
 
     // iterate over all the functions
-    let active_function = parserFunction(program.body, user_line);
-    let global_variables = globalVariables(program.body, user_line);
+    const active_function = parserFunction(program.program.body, user_line);
+    const global_variables = globalVariables(program.program.body, user_line);
 
     // get the whole function
     let range: vscode.Range;
@@ -63,10 +62,17 @@ export function activate(context: vscode.ExtensionContext) {
 
       vscode.workspace.onDidChangeTextDocument((e) => {
         const new_source = editor?.document.getText();
-        const new_program = parse(new_source ? new_source : "", PARSE_OPTIONS);
-        const new_active_function = parserFunction(new_program.body, user_line);
+        const new_program = parse(new_source ? new_source : "", {
+          allowImportExportEverywhere: true,
+          allowAwaitOutsideFunction: true,
+          plugins: ["typescript"],
+        });
+        const new_active_function = parserFunction(
+          new_program.program.body,
+          user_line
+        );
         const new_global_variables = globalVariables(
-          new_program.body,
+          new_program.program.body,
           user_line
         );
         const new_range = getRange(new_active_function);
@@ -98,7 +104,11 @@ export function activate(context: vscode.ExtensionContext) {
 
       // parse the source code
       // TODO only if the input is valid (try catch?)
-      let program = parse(source ? source : "", PARSE_OPTIONS);
+      const program = parse(source ? source : "", {
+        allowImportExportEverywhere: true,
+        allowAwaitOutsideFunction: true,
+        plugins: ["typescript"],
+      });
 
       // fix position, as vscode begins at 0, 0 and eslint alt 1,0
       const user_line = position?.line ? position.line + 1 : -1;
