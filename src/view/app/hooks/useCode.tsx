@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useDebugValue, useEffect, useState } from 'react';
 import { generate } from "astring";
-import { useVariable } from './useVariable';
 
 export const useCode = (code: any) => {
   const [estree, setEstree] = useState(code);
@@ -14,13 +13,12 @@ export const useCode = (code: any) => {
     }
   }, [estree]);
 
-  useEffect(() => {
+  const updateOutput = () => {
     const values = [];
 
     variables.forEach(el => values.push(el?.value));
 
-    const func = new Function(`return ${generated}`);
-    console.log(func);
+    const func = new Function(`return ${generated}`)();
 
     try {
       setOutput(Reflect.apply(func, undefined, values));
@@ -28,7 +26,7 @@ export const useCode = (code: any) => {
       console.log(err);
       setOutput(err.toString());
     }
-  }, [...variables]);
+  }
 
   const updateCode = (new_est: any) => {
     if (new_est) {
@@ -42,8 +40,11 @@ export const useCode = (code: any) => {
     if (variable) {
       variable.value = value;
     }
-    console.log(variables);
+
+    updateOutput();
   }
 
-  return [generated, updateCode, setVariable, output] as const;
+  useDebugValue(output || 'Not generated');
+
+  return [generated, updateCode, variables, setVariable, output] as const;
 }

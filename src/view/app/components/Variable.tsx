@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React, { FunctionComponent } from 'react';
 
-const Variable = ({ name, typeAnnotation, updateValue }) => {
+const Variable: FunctionComponent<{ name: string, typeAnnotation?: any, updateValue: (name: string, value: any) => void }> = ({ name, typeAnnotation, updateValue }) => {
   const handleChange = (value: string) => {
-    updateValue(convert_value(value), name);
+    updateValue(name, convert_value(value));
   };
 
   return (
