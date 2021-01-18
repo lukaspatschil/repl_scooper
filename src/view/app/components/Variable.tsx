@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 
-const Variable: FunctionComponent<{ name: string, typeAnnotation?: any, updateValue: (name: string, value: any) => void }> = ({ name, typeAnnotation, updateValue }) => {
+const Variable: FunctionComponent<{ name: string, updateValue: (name: string, value: any) => void }> = ({ name, updateValue }) => {
   const handleChange = (value: string) => {
     updateValue(name, convert_value(value));
   };
@@ -11,8 +11,7 @@ const Variable: FunctionComponent<{ name: string, typeAnnotation?: any, updateVa
         <label className="var-lable" htmlFor="variable">{name}</label>
       </div>
       <div className="border">
-        <input name="variable" type="text" onChange={(e) => handleChange(e.target.value)}
-          placeholder={typeAnnotation ? get_type(typeAnnotation?.typeAnnotation?.type) : "any"} />
+        <input name="variable" type="text" onChange={(e) => handleChange(e.target.value)} />
       </div>
     </div>
   );

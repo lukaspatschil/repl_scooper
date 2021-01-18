@@ -35,7 +35,7 @@ export const useCode = (code: any) => {
   }
 
   const setVariable = (name: string, value: any) => {
-    let variable = variables.find(el => el.name === name);
+    const variable = variables.find(el => el.name === name);
 
     if (variable) {
       variable.value = value;

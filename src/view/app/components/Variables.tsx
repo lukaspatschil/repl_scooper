@@ -15,6 +15,18 @@ const Variables: FunctionComponent<{ variables: IVariable[], setVariable: (name:
     }
   };
 
+  const updateSelf = (name: string, value: any) => {
+    if (inputRef.current?.checked) {
+      setVariable(name, value);
+    }
+
+    const variable = values.find(el => el.name === name);
+
+    if (variable) {
+      variable.value = value;
+    }
+  }
+
   useEffect(() => {
     setValues([...parseParams(variables)]);
   }, []);
@@ -25,7 +37,7 @@ const Variables: FunctionComponent<{ variables: IVariable[], setVariable: (name:
         name="vars" id={`variables-${identifier}`} value={`variables-${identifier}`} />
       {
         values.map((el) => <Variable key={el.name + identifier}
-          name={el.name} typeAnnotation="any" updateValue={setVariable} />)
+          name={el.name} updateValue={updateSelf} />)
       }
     </label></React.Fragment>;
 };
