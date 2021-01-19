@@ -1,9 +1,11 @@
 import { useDebugValue, useEffect, useState } from 'react';
 import { generate } from "astring";
 
-export const useCode = (code: any) => {
+
+export const useCode = (code: any, global: any) => {
   const [estree, setEstree] = useState(code);
   const [variables, setVariables] = useState(code?.params);
+  const [globals, setGlobals] = useState(global);
   const [generated, setGenerated] = useState<string>(undefined);
   const [output, setOutput] = useState<any>(undefined);
 
@@ -15,10 +17,15 @@ export const useCode = (code: any) => {
 
   const updateOutput = () => {
     const values = [];
+    let globalString = '';
 
     variables.forEach(el => values.push(el?.value));
 
-    const func = new Function(`return ${generated}`)();
+    console.log(generate(globals));
+
+    // globals.forEach(el => globalString += generate(el));
+
+    const func = new Function(`${globalString}return ${generated}`)();
 
     try {
       setOutput(Reflect.apply(func, undefined, values));
@@ -26,13 +33,13 @@ export const useCode = (code: any) => {
       console.log(err);
       setOutput(err.toString());
     }
-  }
+  };
 
   const updateCode = (new_est: any) => {
     if (new_est) {
       setEstree(new_est);
     }
-  }
+  };
 
   const setVariable = (name: string, value: any) => {
     const variable = variables.find(el => el.name === name);
@@ -42,9 +49,21 @@ export const useCode = (code: any) => {
     }
 
     updateOutput();
-  }
+  };
+
+  const setGlobal = (name: string, value: any) => {
+    const variable = globals.find(el => el?.declarations[0]?.id?.name === name);
+
+    if (variable?.declarations[0]?.init) {
+      variable.declarations[0].init.value = value;
+    }
+
+    console.log(globals);
+
+    updateOutput();
+  };
 
   useDebugValue(output || 'Not generated');
 
-  return [generated, updateCode, variables, setVariable, output] as const;
+  return [generated, updateCode, variables, setVariable, globals, setGlobal, output] as const;
 }

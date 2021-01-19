@@ -61,7 +61,10 @@ export function globalVariables(
   const variables: ProgramStatment[] = [];
 
   for (const statemnt of program) {
-    if (user_line >= statemnt.loc.start.line) {
+    if (
+      user_line >= statemnt.loc.start.line &&
+      statemnt.type === "VariableDeclaration"
+    ) {
       variables.push(statemnt);
     }
   }
