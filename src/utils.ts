@@ -30,10 +30,7 @@ export function parserFunction(
       user_line <= statment.loc.end.line
     ) {
       if (statment.type === "FunctionDeclaration") {
-        if (
-          statment.body !== undefined &&
-          statment.body.type === "BlockStatement"
-        ) {
+        if (statment?.body?.type === "BlockStatement") {
           const tmp = parserFunction(statment.body.body, user_line);
           if (tmp) {
             return tmp;

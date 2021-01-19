@@ -1,5 +1,6 @@
 import { useDebugValue, useEffect, useState } from 'react';
 import { generate } from "astring";
+import { make_global } from '../util';
 
 
 export const useCode = (code: any, global: any) => {
@@ -17,15 +18,17 @@ export const useCode = (code: any, global: any) => {
 
   const updateOutput = () => {
     const values = [];
-    let globalString = '';
 
     variables.forEach(el => values.push(el?.value));
 
-    console.log(generate(globals));
+    const ast = make_global(globals);
 
-    // globals.forEach(el => globalString += generate(el));
+    const global_string = generate(ast);
 
-    const func = new Function(`${globalString}return ${generated}`)();
+    const func = new Function(`${global_string}return ${generated}`)();
+
+    console.log(global_string);
+    console.log(ast);
 
     try {
       setOutput(Reflect.apply(func, undefined, values));
@@ -56,9 +59,8 @@ export const useCode = (code: any, global: any) => {
 
     if (variable?.declarations[0]?.init) {
       variable.declarations[0].init.value = value;
+      variable.declarations[0].init.raw = String(value);
     }
-
-    console.log(globals);
 
     updateOutput();
   };

@@ -2,9 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import ViewLoader from "./view/ViewLoader";
-import { transformSync } from "@babel/core";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
+import * as acorn from "acorn";
 import {
   parserFunction,
   parserCommands,
@@ -37,12 +36,23 @@ export function activate(context: vscode.ExtensionContext) {
       plugins: ["typescript"],
     });
 
+    const acorn_prog = acorn.parse(source ? source : "", {
+      ecmaVersion: "latest",
+      allowImportExportEverywhere: true,
+      allowAwaitOutsideFunction: true,
+      locations: true,
+    });
+
+    console.log(acorn_prog);
+
     // fix position, as vscode begins at 0, 0 and eslint alt 1, 0
     const user_line = position?.line ? position.line + 1 : -1;
 
     // iterate over all the functions
-    const active_function = parserFunction(program.program.body, user_line);
-    const global_variables = globalVariables(program.program.body, user_line);
+    //@ts-ignore
+    const active_function = parserFunction(acorn_prog.body, user_line);
+    //@ts-ignore
+    const global_variables = globalVariables(acorn_prog.body, user_line);
 
     // get the whole function
     let range: vscode.Range;
