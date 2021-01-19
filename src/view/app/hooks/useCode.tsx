@@ -28,9 +28,6 @@ export const useCode = (code: any, global: any) => {
 
     const func = new Function(`${global_string}return ${generated}`)();
 
-    console.log(global_string);
-    console.log(ast);
-
     try {
       setOutput(Reflect.apply(func, undefined, values));
     } catch (err) {
