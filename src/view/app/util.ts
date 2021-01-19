@@ -1,3 +1,4 @@
+import { Node } from "acorn";
 import { IVariable } from "./types/types";
 
 export const parseParams = (params: any) => {
@@ -36,12 +37,13 @@ export const get_type = (ts_type: any) => {
 };
 
 export const make_global = (globals: any[]) => {
-  const ast = {
+  const ast: Node = {
     type: "Program",
-    sourceType: "script",
+    // @ts-ignore
     body: [],
   };
 
+  // @ts-ignore
   globals.forEach((el) => ast.body.push(el));
 
   return ast;

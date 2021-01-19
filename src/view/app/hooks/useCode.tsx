@@ -23,6 +23,7 @@ export const useCode = (code: any, global: any) => {
 
     const ast = make_global(globals);
 
+    // @ts-ignore
     const global_string = generate(ast);
 
     const func = new Function(`${global_string}return ${generated}`)();
