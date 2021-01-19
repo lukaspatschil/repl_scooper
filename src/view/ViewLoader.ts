@@ -55,11 +55,12 @@ export default class ViewLoader {
     code_string: string
   ) {
     if (this._panel) {
-      this._panel.webview.html = this.getWebviewContent(
-        code,
-        global_variables,
-        code_string
-      );
+      // this._panel.webview.html = this.getWebviewContent(
+      //   code,
+      //   global_variables,
+      //   code_string
+      // );
+      this._panel.webview.postMessage({ code: code, code_string: code_string });
     }
   }
 

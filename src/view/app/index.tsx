@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import App from "./App";
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 
-
 import './index.css';
 
 declare global {

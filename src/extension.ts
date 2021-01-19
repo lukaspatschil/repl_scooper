@@ -61,9 +61,9 @@ export function activate(context: vscode.ExtensionContext) {
         editor
       );
 
-      vscode.workspace.onDidChangeTextDocument((e) => {
+      vscode.workspace.onDidSaveTextDocument((e) => {
         const new_source = editor?.document.getText();
-        const new_program = parse(source ? source : "", {
+        const new_program = parse(new_source ? new_source : "", {
           ecmaVersion: "latest",
           allowImportExportEverywhere: true,
           allowAwaitOutsideFunction: true,

@@ -5,18 +5,29 @@ import Variables from './components/Variables';
 import { useCode } from './hooks/useCode';
 import { useDataset } from './hooks/useDataset';
 
+window.addEventListener('message', event => {
+  const message = event.data;
+
+  window.code = message.code;
+  window.code_string = message.code_string;
+  console.log(window.code_string);
+});
+
 export const App: FunctionComponent<{
   code: any,
   global_variables: any[],
   code_string: string
 }> = ({ code, global_variables, code_string }) => {
-  const [generated, setCode, variables, setVariable, globals, setGlobal, output] = useCode(code, global_variables);
+  const [setVariable, globals, setGlobal, output] = useCode(code, global_variables);
   const [datasets, addDataSet] = useDataset(code);
 
   useEffect(() => {
-    console.log(global_variables);
     addDataSet();
   }, []);
+
+  useEffect(() => {
+    console.log("change is happening");
+  }, [window.code]);
 
   return (
     <>
@@ -32,7 +43,7 @@ export const App: FunctionComponent<{
       </section>
       <section>
         <h2>Your code:</h2>
-        <Code code={generated ? generated : ""} />
+        <Code code={code_string ? code_string : ""} />
       </section>
       <section>
         <h2>Your output:</h2>
