@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import Code from './components/Code';
+import { Output } from './components/Output';
 import Variable from './components/Variable';
 import Variables from './components/Variables';
 import { useCode } from './hooks/useCode';
@@ -46,7 +47,7 @@ export const App: FunctionComponent<{
       </section>
       <section>
         <h2>Your output:</h2>
-        {output}
+        <Output value={output} />
       </section>
     </>
   );

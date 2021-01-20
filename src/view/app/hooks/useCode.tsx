@@ -67,7 +67,7 @@ export const useCode = (code: any, global: any) => {
     setEstree(new_estree);
     setVariables(code?.params);
     setGlobals(new_globals);
-  }
+  };
 
   useDebugValue(output || 'Not generated');
 

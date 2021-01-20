@@ -29,4 +29,12 @@ function name1(params) {
   return sum(1, 2, 3);
 }
 
+function foo1() {
+  const promise = new Promise((resolve, reject) => {
+    resolve("ok");
+  });
+
+  return promise;
+}
+
 const asd = "123";
