@@ -3,7 +3,7 @@
 const test123 = "a";
 const testasd = 1;
 
-function sum(a: number, b: number, c: number) {
+function sum(a, b, c) {
   function asd1(params) {
     function name1(params) {
       function name2(params) {
@@ -16,16 +16,16 @@ function sum(a: number, b: number, c: number) {
   return a + b + c;
 }
 
-function foo(a: number, b: number) {
+function foo(a, b) {
   return a + b;
 }
 
-const multi = (a: number, b: number) => {
+const multi = (a, b) => {
   const test = null;
   return a * b;
 };
 
-function name1(params: number) {
+function name1(params) {
   return sum(1, 2, 3);
 }
 

@@ -52,7 +52,12 @@ export const useCode = (code: any, global: any) => {
 
     if (variable?.declarations[0]?.init) {
       variable.declarations[0].init.value = value;
-      variable.declarations[0].init.raw = String(value);
+      if (typeof value === "string") {
+        variable.declarations[0].init.raw = `"${value}"`;
+      }
+      else {
+        variable.declarations[0].init.raw = String(value);
+      }
     }
 
     updateOutput();
