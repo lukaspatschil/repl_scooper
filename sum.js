@@ -31,7 +31,15 @@ function name1(params) {
 
 function foo1() {
   const promise = new Promise((resolve, reject) => {
-    resolve("ok");
+    const random = Math.random();
+
+    if (random >= 0.5) {
+      resolve("ok");
+    }
+    else
+    {
+      reject("error");
+    }
   });
 
   return promise;

@@ -10,7 +10,6 @@ const Variables: FunctionComponent<{ variables: IVariable[], setVariable: (name:
 
   const updateAll = () => {
     if (inputRef.current?.checked) {
-      console.log(values);
       values.forEach(el => setVariable(el.name, el.value));
     }
   };
