@@ -1,8 +1,12 @@
-import * as React from 'react';
+import React, { FunctionComponent, useState } from 'react';
+import { convert_value } from '../util';
 
-const Variable = ({ name, typeAnnotation, updateValue }) => {
-  const handleChange = (value: string) => {
-    updateValue(convert_value(value), name);
+const Variable: FunctionComponent<{ name: string, preValue?: any, updateValue: (name: string, value: any) => void }> = ({ name, preValue, updateValue }) => {
+  const [value, setValue] = useState((preValue !== undefined ? preValue : ""));
+
+  const handleChange = (eventValue: string) => {
+    setValue(convert_value(eventValue));
+    updateValue(name, convert_value(eventValue));
   };
 
   return (
@@ -11,36 +15,10 @@ const Variable = ({ name, typeAnnotation, updateValue }) => {
         <label className="var-lable" htmlFor="variable">{name}</label>
       </div>
       <div className="border">
-        <input name="variable" type="text" onChange={(e) => handleChange(e.target.value)}
-          placeholder={typeAnnotation ? get_type(typeAnnotation?.typeAnnotation?.type) : "any"} />
+        <input name="variable" type="text" value={value} onChange={(e) => handleChange(e.target.value)} />
       </div>
     </div>
   );
-};
-
-const convert_value = (value: string) => {
-  if (value === `true`) {
-    return true;
-  } else if (value === `flase`) {
-    return false;
-  } else if (!Number.isNaN(Number(value))) {
-    return Number(value);
-  } else {
-    return value;
-  }
-};
-
-const get_type = (ts_type) => {
-  switch (ts_type) {
-    case "TSNumberKeyword":
-      return "number";
-    case "TSStringKeyword":
-      return "string";
-    case "TSBooleanKeyword":
-      return "boolean";
-    default:
-      return "unknown";
-  }
 };
 
 export default Variable;

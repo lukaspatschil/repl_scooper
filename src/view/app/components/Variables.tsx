@@ -1,25 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { IPropsVariables, IVariable } from '../types/types';
+import React, { useState, useEffect, useRef, FunctionComponent } from 'react';
+import { IVariable } from '../types/types';
+import { parseParams } from '../util';
 
 import Variable from './Variable';
 
-const Variables = ({ variables, updateValues, identifier }: IPropsVariables) => {
+const Variables: FunctionComponent<{ variables: IVariable[], setVariable: (name: string, value: any) => void, identifier: number }> = ({ variables, setVariable, identifier }) => {
   const [values, setValues] = useState<IVariable[]>([]);
   const inputRef = useRef(null);
 
-  const saveValues = (value: any, name: string) => {
-    // TODO make imutable
-    const tmp = values;
-    tmp[tmp.findIndex(el => el.name === name)].value = value;
-    dosomething();
-    // setVariables(tmp);
-  };
-
-  const dosomething = () => {
+  const updateAll = () => {
     if (inputRef.current?.checked) {
-      updateValues(values);
+      console.log(values);
+      values.forEach(el => setVariable(el.name, el.value));
     }
   };
+
+  const updateSelf = (name: string, value: any) => {
+    if (inputRef.current?.checked) {
+      setVariable(name, value);
+    }
+
+    const variable = values.find(el => el.name === name);
+
+    if (variable) {
+      variable.value = value;
+    }
+  }
 
   useEffect(() => {
     setValues([...parseParams(variables)]);
@@ -27,24 +33,13 @@ const Variables = ({ variables, updateValues, identifier }: IPropsVariables) => 
 
   return <React.Fragment>
     <label htmlFor={`variables-${identifier}`}>
-      <input ref={inputRef} onClick={dosomething} type="radio" defaultChecked={identifier === 0 ? true : false}
+      <input ref={inputRef} onClick={updateAll} type="radio" defaultChecked={identifier === 0 ? true : false}
         name="vars" id={`variables-${identifier}`} value={`variables-${identifier}`} />
       {
-        values.map((el) => <Variable key={el.name}
-          name={el.name} typeAnnotation="any" updateValue={saveValues} />)
+        values.map((el) => <Variable key={el.name + identifier}
+          name={el.name} updateValue={updateSelf} />)
       }
     </label></React.Fragment>;
-};
-
-const parseParams = (params) => {
-  let dataset: IVariable[] = [];
-
-  for (let variable of params) {
-    dataset = [...dataset, { name: variable.name } as IVariable];
-  }
-
-  console.log(dataset);
-  return dataset;
 };
 
 export default Variables;

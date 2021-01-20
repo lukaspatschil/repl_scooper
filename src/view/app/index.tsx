@@ -1,10 +1,9 @@
+import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from "./App";
-import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
-
-
 import './index.css';
+
 
 declare global {
     interface Window {
@@ -15,12 +14,9 @@ declare global {
     }
 }
 
-const vscode = window.acquireVsCodeApi();
-
-console.log(window.code);
-console.log(vscode);
+console.log(tsvscode);
 
 ReactDOM.render(
-    <App vscode={vscode} code={window.code} global_variables={window.global_variables} code_string={window.code_string} />,
+    <App code={window.code} global_variables={window.global_variables} code_string={window.code_string} />,
     document.getElementById('root')
 );
