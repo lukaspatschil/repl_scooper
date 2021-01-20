@@ -28,10 +28,6 @@ export const App: FunctionComponent<{
     addDataSet();
   }, []);
 
-  useEffect(() => {
-    console.log("change is happening");
-  }, [window.code]);
-
   return (
     <>
       <h1>REPL Code</h1>
