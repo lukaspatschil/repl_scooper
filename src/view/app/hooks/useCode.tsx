@@ -4,9 +4,9 @@ import { make_global } from '../util';
 
 
 export const useCode = (code: any, global: any) => {
-  const [estree] = useState(code);
-  const [variables] = useState(code?.params);
-  const [globals] = useState(global);
+  const [estree, setEstree] = useState(code);
+  const [variables, setVariables] = useState(code?.params);
+  const [globals, setGlobals] = useState(global);
   const [generated, setGenerated] = useState<string>(undefined);
   const [output, setOutput] = useState<any>(undefined);
 
@@ -57,7 +57,13 @@ export const useCode = (code: any, global: any) => {
     updateOutput();
   };
 
+  const setCode = (new_estree: any, new_globals: any) => {
+    setEstree(new_estree);
+    setVariables(code?.params);
+    setGlobals(new_globals);
+  }
+
   useDebugValue(output || 'Not generated');
 
-  return [setVariable, globals, setGlobal, output] as const;
+  return [setVariable, globals, setGlobal, setCode, output] as const;
 }

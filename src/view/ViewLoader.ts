@@ -60,7 +60,11 @@ export default class ViewLoader {
       //   global_variables,
       //   code_string
       // );
-      this._panel.webview.postMessage({ code: code, code_string: code_string });
+      this._panel.webview.postMessage({
+        code,
+        global_variables,
+        code_string,
+      });
     }
   }
 
