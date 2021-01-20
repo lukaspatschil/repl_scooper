@@ -1,7 +1,7 @@
-import * as vscode from "vscode";
-import * as path from "path";
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import * as path from "path";
+import * as vscode from "vscode";
 import { getRange } from "../utils";
 
 export default class ViewLoader {
@@ -44,6 +44,7 @@ export default class ViewLoader {
       code_string
     );
 
+    // remove the text decoration on the selected function / code segment
     this._panel.onDidDispose(() => {
       this.activeDecorationType.dispose();
     });
@@ -54,12 +55,8 @@ export default class ViewLoader {
     global_variables: ProgramStatment[],
     code_string: string
   ) {
+    // send new message to the webview with the updated values
     if (this._panel) {
-      // this._panel.webview.html = this.getWebviewContent(
-      //   code,
-      //   global_variables,
-      //   code_string
-      // );
       this._panel.webview.postMessage({
         code,
         global_variables,

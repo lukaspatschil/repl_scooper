@@ -1,4 +1,5 @@
 import { Node } from "acorn";
+import { useState } from "react";
 import { IVariable } from "./types/types";
 
 export const parseParams = (params: any) => {
@@ -47,4 +48,9 @@ export const make_global = (globals: any[]) => {
   globals.forEach((el) => ast.body.push(el));
 
   return ast;
+};
+
+export const useForceUpdate = () => {
+  const [, setValue] = useState(0); // integer state
+  return () => setValue((value) => value + 1); // update the state to force render
 };

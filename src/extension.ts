@@ -1,14 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from "vscode";
-import ViewLoader from "./view/ViewLoader";
 import { parse } from "acorn";
-import {
-  parserFunction,
-  parserCommands,
-  globalVariables,
-  getRange,
-} from "./utils";
+import * as vscode from "vscode";
+import { getRange, globalVariables, parserFunction } from "./utils";
+import ViewLoader from "./view/ViewLoader";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

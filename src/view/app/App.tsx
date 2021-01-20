@@ -1,14 +1,10 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import Code from './components/Code';
 import Variable from './components/Variable';
 import Variables from './components/Variables';
 import { useCode } from './hooks/useCode';
 import { useDataset } from './hooks/useDataset';
-
-const useForceUpdate = () => {
-  const [, setValue] = useState(0); // integer state
-  return () => setValue(value => value + 1); // update the state to force render
-};
+import { useForceUpdate } from './util';
 
 export const App: FunctionComponent<{
   code: any,
@@ -19,12 +15,12 @@ export const App: FunctionComponent<{
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();
 
+  // listen for new input from the repl code
   window.addEventListener('message', event => {
     const message = event.data;
 
     setCode(message.code, message.global_variables);
     window.code_string = message.code_string;
-    console.log(window.code_string);
     forceUpdate();
   });
 
