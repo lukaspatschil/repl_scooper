@@ -10,7 +10,7 @@ export const useCode = (code: any, global: any) => {
   const [globals, setGlobals] = useState(global);
   const [generated, setGenerated] = useState<string>("");
   const [output, setOutput] = useState<any>(undefined);
-  const writeToFile = useFilewriter(window.extensionPath);
+  const writeToFile = useFilewriter();
 
   useEffect(() => {
     if (estree) {

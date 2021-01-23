@@ -1,4 +1,4 @@
-const useFilewriter = (extensionPath: string, initialData?: string) => {
+const useFilewriter = (initialData?: string) => {
 
   const writeToFile = (data: string) => {
     // writeFileSync(fullPath, data);
