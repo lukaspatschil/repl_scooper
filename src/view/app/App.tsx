@@ -9,9 +9,8 @@ import { useForceUpdate } from './util';
 
 export const App: FunctionComponent<{
   code: any,
-  global_variables: any[],
-  code_string: string
-}> = ({ code, global_variables, code_string }) => {
+  global_variables: Array<any>
+}> = ({ code, global_variables }) => {
   const [setVariable, globals, setGlobal, setCode, output] = useCode(code, global_variables);
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();

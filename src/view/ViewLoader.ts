@@ -1,12 +1,15 @@
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import { writeFileSync } from "fs";
 import * as path from "path";
+import { join } from "path";
 import * as vscode from "vscode";
 import { getRange } from "../utils";
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
   private readonly _extensionPath: string;
+  private readonly _activeFolder: readonly vscode.WorkspaceFolder[] | undefined;
   private readonly activeDecorationType = vscode.window.createTextEditorDecorationType(
     {
       backgroundColor: "green",
@@ -18,9 +21,12 @@ export default class ViewLoader {
     code: ProgramStatment,
     global_variables: ProgramStatment[],
     code_string: string,
-    editor: vscode.TextEditor
+    editor: vscode.TextEditor,
+    active_folder: readonly vscode.WorkspaceFolder[] | undefined
   ) {
     this._extensionPath = extensionPath;
+
+    this._activeFolder = active_folder ?? undefined;
 
     const ranges: vscode.Range[] = [getRange(code)];
     this.decorate(editor, ranges, this.activeDecorationType);
@@ -44,6 +50,14 @@ export default class ViewLoader {
       code_string
     );
 
+    this._panel.webview.onDidReceiveMessage(({ command, value }) => {
+      switch (command) {
+        case "SaveIt":
+          this.saveFileContent(value);
+          return;
+      }
+    });
+
     // remove the text decoration on the selected function / code segment
     this._panel.onDidDispose(() => {
       this.activeDecorationType.dispose();
@@ -63,6 +77,18 @@ export default class ViewLoader {
         code_string,
       });
     }
+  }
+
+  private saveFileContent(data: string) {
+    const folder = this._activeFolder ?? [];
+
+    const fullPath = join(folder[0].uri.fsPath, "generated.js");
+
+    writeFileSync(fullPath, data);
+
+    vscode.window.showInformationMessage(
+      `👍 Configuration saved to ${this._extensionPath}`
+    );
   }
 
   private getWebviewContent(

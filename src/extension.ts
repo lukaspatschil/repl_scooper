@@ -40,6 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
     //@ts-ignore
     const global_variables = globalVariables(acorn_prog.body, user_line);
 
+    const active_folder = vscode.workspace.workspaceFolders;
+
     // get the whole function
     let range: vscode.Range;
     let source_string: string | undefined;
@@ -53,7 +55,8 @@ export function activate(context: vscode.ExtensionContext) {
         active_function,
         global_variables,
         source_string ? source_string : "",
-        editor
+        editor,
+        active_folder
       );
 
       vscode.workspace.onDidSaveTextDocument((e) => {

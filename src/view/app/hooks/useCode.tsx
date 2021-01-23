@@ -1,6 +1,7 @@
 import { generate } from "astring";
 import { useDebugValue, useEffect, useState } from 'react';
 import { make_global } from '../util';
+import useFilewriter from './useFilewriter';
 
 
 export const useCode = (code: any, global: any) => {
@@ -9,6 +10,7 @@ export const useCode = (code: any, global: any) => {
   const [globals, setGlobals] = useState(global);
   const [generated, setGenerated] = useState<string>("");
   const [output, setOutput] = useState<any>(undefined);
+  const writeToFile = useFilewriter(window.extensionPath);
 
   useEffect(() => {
     if (estree) {
@@ -27,6 +29,8 @@ export const useCode = (code: any, global: any) => {
     const global_string = generate(ast);
 
     const func = new Function(`${global_string}return ${generated}`)();
+
+    writeToFile(String(func));
 
     try {
       // @ts-ignore
