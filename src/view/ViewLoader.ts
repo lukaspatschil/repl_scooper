@@ -1,7 +1,7 @@
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 import { exec } from "child_process";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import * as path from "path";
 import { join } from "path";
 import { stderr } from "process";
@@ -110,7 +110,11 @@ export default class ViewLoader {
       if (error !== null) {
         console.error(`exec error: ${error}`);
       }
+
+      //! add in final build
+      // unlinkSync(filePath);
     });
+
     // vscode.window.showInformationMessage(
     //   `👍 Configuration saved to ${this._extensionPath}`
     // );
