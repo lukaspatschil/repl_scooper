@@ -2,7 +2,12 @@
 // Import the module and reference it with the alias vscode in your code below
 import { parse } from "acorn";
 import * as vscode from "vscode";
-import { getRange, globalVariables, parserFunction } from "./utils";
+import {
+  getRange,
+  globalVariables,
+  parserFunction,
+  requiresVariables,
+} from "./utils";
 import ViewLoader from "./view/ViewLoader";
 
 // this method is called when your extension is activated
@@ -34,13 +39,14 @@ export function activate(context: vscode.ExtensionContext) {
     // fix position, as vscode begins at 0, 0 and eslint alt 1, 0
     const user_line = position?.line ? position.line + 1 : -1;
 
-    console.log(acorn_prog);
-
     // iterate over all the functions
     //@ts-ignore
     const active_function = parserFunction(acorn_prog.body, user_line);
     //@ts-ignore
     const global_variables = globalVariables(acorn_prog.body, user_line);
+
+    //@ts-ignore
+    const requires = requiresVariables(acorn_prog.body, user_line);
 
     const active_folder = vscode.workspace.workspaceFolders;
 
@@ -56,6 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
         context.extensionPath,
         active_function,
         global_variables,
+        requires,
         source_string ? source_string : "",
         editor,
         active_folder

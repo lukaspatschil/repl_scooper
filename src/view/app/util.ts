@@ -1,6 +1,6 @@
 import { Node } from "acorn";
 import { useState } from "react";
-import { IVariable } from "./types/types";
+import { IVariable } from "./types/interface";
 
 export const parseParams = (params: any) => {
   let dataset: IVariable[] = [];

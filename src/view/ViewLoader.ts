@@ -22,6 +22,7 @@ export default class ViewLoader {
     extensionPath: string,
     code: ProgramStatment,
     global_variables: ProgramStatment[],
+    requires: ProgramStatment[],
     code_string: string,
     editor: vscode.TextEditor,
     active_folder: readonly vscode.WorkspaceFolder[] | undefined
@@ -49,6 +50,7 @@ export default class ViewLoader {
     this._panel.webview.html = this.getWebviewContent(
       code,
       global_variables,
+      requires,
       code_string
     );
 
@@ -117,6 +119,7 @@ export default class ViewLoader {
   private getWebviewContent(
     code: ProgramStatment,
     global_variables: ProgramStatment[],
+    requires: ProgramStatment[],
     code_string: string
   ): string {
     const reactAppPathOnDisk = vscode.Uri.file(
@@ -142,6 +145,7 @@ export default class ViewLoader {
           const tsvscode = acquireVsCodeApi();
           window.code = ${JSON.stringify(code)};
           window.global_variables = ${JSON.stringify(global_variables)};
+          window.requires = ${JSON.stringify(requires)};
           window.code_string = ${JSON.stringify(code_string)};
 				</script>
     </head>

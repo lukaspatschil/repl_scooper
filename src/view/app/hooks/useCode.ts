@@ -1,10 +1,13 @@
 import { generate } from "astring";
-import { useDebugValue, useEffect, useState } from 'react';
-import { make_function_call, make_global } from '../util';
-import useFilewriter from './useFilewriter';
+import { useDebugValue, useEffect, useState } from "react";
+import { make_function_call, make_global } from "../util";
+import useFilewriter from "./useFilewriter";
 
-
-export const useCode = (code: any, global: any) => {
+export const useCode = (
+  code: any,
+  global: Array<any>,
+  requires: Array<any>
+) => {
   const [estree, setEstree] = useState(code);
   const [variables, setVariables] = useState(code?.params);
   const [globals, setGlobals] = useState(global);
@@ -21,14 +24,23 @@ export const useCode = (code: any, global: any) => {
   const updateOutput = () => {
     const values: Array<any> = [];
 
-    variables.forEach((el: { value: any; }) => values.push(el?.value));
+    variables.forEach((el: { value: any }) => values.push(el?.value));
 
     const ast = make_global(globals);
+
+    const requires_ast = make_global(requires);
 
     // @ts-ignore
     const global_string = generate(ast);
 
-    const func = new Function(`${global_string}\nconsole.log((${generated})())`);
+    // @ts-ignore
+    const require_string = generate(requires_ast);
+
+    console.log(require_string);
+
+    const func = new Function(
+      `${require_string}\n${global_string}\nconsole.log((${generated})())`
+    );
 
     const function_call = make_function_call("anonymous");
     // @ts-ignore
@@ -46,7 +58,7 @@ export const useCode = (code: any, global: any) => {
   };
 
   const setVariable = (name: string, value: any) => {
-    const variable = variables.find((el: { name: string; }) => el.name === name);
+    const variable = variables.find((el: { name: string }) => el.name === name);
 
     if (variable) {
       variable.value = value;
@@ -56,14 +68,16 @@ export const useCode = (code: any, global: any) => {
   };
 
   const setGlobal = (name: string, value: any) => {
-    const variable = globals.find((el: { declarations: { id: { name: string; }; }[]; }) => el?.declarations[0]?.id?.name === name);
+    const variable = globals.find(
+      (el: { declarations: { id: { name: string } }[] }) =>
+        el?.declarations[0]?.id?.name === name
+    );
 
     if (variable?.declarations[0]?.init) {
       variable.declarations[0].init.value = value;
       if (typeof value === "string") {
         variable.declarations[0].init.raw = `"${value}"`;
-      }
-      else {
+      } else {
         variable.declarations[0].init.raw = String(value);
       }
     }
@@ -77,7 +91,7 @@ export const useCode = (code: any, global: any) => {
     setGlobals(new_globals);
   };
 
-  useDebugValue(output || 'Not generated');
+  useDebugValue(output || "Not generated");
 
   return [setVariable, globals, setGlobal, setCode, output] as const;
 };
