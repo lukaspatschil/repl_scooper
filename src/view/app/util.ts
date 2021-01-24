@@ -52,20 +52,37 @@ export const make_global = (globals: any[]) => {
 
 export const make_function_call = (name: string) => {
   const function_call = {
+    type: "CallExpression",
+    callee: {
+      type: "Identifier",
+      name,
+    },
+    arguments: [],
+  };
+
+  const l = {
     type: "ExpressionStatement",
     expression: {
       type: "CallExpression",
       callee: {
-        type: "Identifier",
-        name,
+        type: "MemberExpression",
+        object: {
+          type: "Identifier",
+          name: "console",
+        },
+        property: {
+          type: "Identifier",
+          name: "log",
+        },
       },
-      arguments: [],
+      arguments: [function_call],
     },
   };
+
   const ast: Node = {
     type: "Program",
     // @ts-ignore
-    body: [function_call],
+    body: [l],
   };
 
   return ast;

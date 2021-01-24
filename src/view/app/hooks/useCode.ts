@@ -42,11 +42,13 @@ export const useCode = (
       `${require_string}\n${global_string}\nconsole.log((${generated})())`
     );
 
-    const function_call = make_function_call("anonymous");
+    const function_call = make_function_call(estree?.id?.name);
     // @ts-ignore
     const something = generate(function_call);
 
-    writeToFile(String(`${func}\n${something}`));
+    const fileString = `${require_string}\n${global_string}\n${generated}\n${something}`;
+
+    writeToFile(fileString);
 
     try {
       // @ts-ignore
