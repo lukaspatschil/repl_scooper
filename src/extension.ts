@@ -22,6 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
     // TODO add validation and only allow js and ts
     const source = editor?.document.getText();
 
+    console.log(context.storagePath);
+
     // parse the source code
     // TODO only if the input is valid (try catch?)
     const acorn_prog = parse(source ? source : "", {

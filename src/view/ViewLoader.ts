@@ -1,6 +1,6 @@
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
-import { writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import * as path from "path";
 import { join } from "path";
 import * as vscode from "vscode";
@@ -82,13 +82,23 @@ export default class ViewLoader {
   private saveFileContent(data: string) {
     const folder = this._activeFolder ?? [];
 
-    const fullPath = join(folder[0].uri.fsPath, "generated.js");
+    const fullPath = join(folder[0].uri.fsPath, ".vscode");
 
-    writeFileSync(fullPath, data);
+    try {
+      if (!existsSync(fullPath)) {
+        mkdirSync(fullPath);
+      }
 
-    vscode.window.showInformationMessage(
-      `👍 Configuration saved to ${this._extensionPath}`
-    );
+      writeFileSync(join(fullPath, "generated.js"), data);
+    } catch (error) {
+      vscode.window.showErrorMessage(
+        `Configuration could not be saved to ${this._extensionPath}`
+      );
+      return;
+    }
+    // vscode.window.showInformationMessage(
+    //   `👍 Configuration saved to ${this._extensionPath}`
+    // );
   }
 
   private getWebviewContent(

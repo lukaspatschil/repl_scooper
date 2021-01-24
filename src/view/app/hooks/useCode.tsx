@@ -76,4 +76,4 @@ export const useCode = (code: any, global: any) => {
   useDebugValue(output || 'Not generated');
 
   return [setVariable, globals, setGlobal, setCode, output] as const;
-}
+};
