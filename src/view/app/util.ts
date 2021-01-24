@@ -50,6 +50,27 @@ export const make_global = (globals: any[]) => {
   return ast;
 };
 
+export const make_function_call = (name: string) => {
+  const function_call = {
+    type: "ExpressionStatement",
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "Identifier",
+        name,
+      },
+      arguments: [],
+    },
+  };
+  const ast: Node = {
+    type: "Program",
+    // @ts-ignore
+    body: [function_call],
+  };
+
+  return ast;
+};
+
 export const useForceUpdate = () => {
   const [, setValue] = useState(0); // integer state
   return () => setValue((value) => value + 1); // update the state to force render

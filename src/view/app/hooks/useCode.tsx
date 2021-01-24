@@ -1,6 +1,6 @@
 import { generate } from "astring";
 import { useDebugValue, useEffect, useState } from 'react';
-import { make_global } from '../util';
+import { make_function_call, make_global } from '../util';
 import useFilewriter from './useFilewriter';
 
 
@@ -28,9 +28,13 @@ export const useCode = (code: any, global: any) => {
     // @ts-ignore
     const global_string = generate(ast);
 
-    const func = new Function(`${global_string}return ${generated}`)();
+    const func = new Function(`${global_string}\nconsole.log((${generated})())`);
 
-    writeToFile(String(func));
+    const function_call = make_function_call("anonymous");
+    // @ts-ignore
+    const something = generate(function_call);
+
+    writeToFile(String(`${func}\n${something}`));
 
     try {
       // @ts-ignore

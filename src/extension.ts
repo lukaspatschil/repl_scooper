@@ -22,8 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
     // TODO add validation and only allow js and ts
     const source = editor?.document.getText();
 
-    console.log(context.storagePath);
-
     // parse the source code
     // TODO only if the input is valid (try catch?)
     const acorn_prog = parse(source ? source : "", {
@@ -35,6 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     // fix position, as vscode begins at 0, 0 and eslint alt 1, 0
     const user_line = position?.line ? position.line + 1 : -1;
+
+    console.log(acorn_prog);
 
     // iterate over all the functions
     //@ts-ignore

@@ -1,8 +1,10 @@
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import { exec } from "child_process";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import * as path from "path";
 import { join } from "path";
+import { stderr } from "process";
 import * as vscode from "vscode";
 import { getRange } from "../utils";
 
@@ -83,19 +85,30 @@ export default class ViewLoader {
     const folder = this._activeFolder ?? [];
 
     const fullPath = join(folder[0].uri.fsPath, ".vscode");
+    const filePath = join(fullPath, "generated.js");
 
     try {
       if (!existsSync(fullPath)) {
         mkdirSync(fullPath);
       }
 
-      writeFileSync(join(fullPath, "generated.js"), data);
+      writeFileSync(filePath, data);
     } catch (error) {
       vscode.window.showErrorMessage(
         `Configuration could not be saved to ${this._extensionPath}`
       );
       return;
     }
+
+    const child = exec(`node ${filePath}`, (error, stdout, stderr) => {
+      const parts = stdout.split("\n");
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
+      if (error !== null) {
+        console.error(`exec error: ${error}`);
+      }
+    });
     // vscode.window.showInformationMessage(
     //   `👍 Configuration saved to ${this._extensionPath}`
     // );
