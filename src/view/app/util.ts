@@ -13,14 +13,22 @@ export const parseParams = (params: any) => {
 };
 
 export const convert_value = (value: string) => {
-  if (value === `true`) {
-    return true;
-  } else if (value === `flase`) {
-    return false;
-  } else if (!Number.isNaN(Number(value))) {
-    return Number(value);
-  } else {
-    return value;
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    if (value.startsWith("[") && value.endsWith("]")) {
+      const inner = value.substring(1, value.length - 2);
+
+      return inner.split(",");
+    } else if (value === `true`) {
+      return true;
+    } else if (value === `false`) {
+      return false;
+    } else if (!Number.isNaN(Number(value))) {
+      return Number(value);
+    } else {
+      return value;
+    }
   }
 };
 
