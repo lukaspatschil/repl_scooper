@@ -1,10 +1,9 @@
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
 import { exec } from "child_process";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import * as path from "path";
 import { join } from "path";
-import { stderr } from "process";
 import * as vscode from "vscode";
 import { getRange } from "../utils";
 
@@ -22,6 +21,7 @@ export default class ViewLoader {
     extensionPath: string,
     code: ProgramStatment,
     global_variables: ProgramStatment[],
+    requires: ProgramStatment[],
     code_string: string,
     editor: vscode.TextEditor,
     active_folder: readonly vscode.WorkspaceFolder[] | undefined
@@ -49,6 +49,7 @@ export default class ViewLoader {
     this._panel.webview.html = this.getWebviewContent(
       code,
       global_variables,
+      requires,
       code_string
     );
 
@@ -74,6 +75,7 @@ export default class ViewLoader {
     // send new message to the webview with the updated values
     if (this._panel) {
       this._panel.webview.postMessage({
+        command: "update",
         code,
         global_variables,
         code_string,
@@ -108,7 +110,20 @@ export default class ViewLoader {
       if (error !== null) {
         console.error(`exec error: ${error}`);
       }
+      if (this._panel) {
+        this._panel.webview.postMessage({
+          command: "output",
+          output:
+            error !== null
+              ? error.message
+              : parts[parts.length > 1 ? parts.length - 2 : 0],
+        });
+      }
+
+      //! add in final build
+      // unlinkSync(filePath);
     });
+
     // vscode.window.showInformationMessage(
     //   `👍 Configuration saved to ${this._extensionPath}`
     // );
@@ -117,6 +132,7 @@ export default class ViewLoader {
   private getWebviewContent(
     code: ProgramStatment,
     global_variables: ProgramStatment[],
+    requires: ProgramStatment[],
     code_string: string
   ): string {
     const reactAppPathOnDisk = vscode.Uri.file(
@@ -142,6 +158,7 @@ export default class ViewLoader {
           const tsvscode = acquireVsCodeApi();
           window.code = ${JSON.stringify(code)};
           window.global_variables = ${JSON.stringify(global_variables)};
+          window.requires = ${JSON.stringify(requires)};
           window.code_string = ${JSON.stringify(code_string)};
 				</script>
     </head>

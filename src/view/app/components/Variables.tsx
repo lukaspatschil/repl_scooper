@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, FunctionComponent } from 'react';
-import { IVariable } from '../types/types';
+import { IVariable } from '../types/interface';
 import { parseParams } from '../util';
 
 import Variable from './Variable';
@@ -24,7 +24,7 @@ const Variables: FunctionComponent<{ variables: IVariable[], setVariable: (name:
     if (variable) {
       variable.value = value;
     }
-  }
+  };
 
   useEffect(() => {
     setValues([...parseParams(variables)]);

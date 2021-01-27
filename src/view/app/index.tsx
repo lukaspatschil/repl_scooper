@@ -9,6 +9,7 @@ declare global {
         acquireVsCodeApi(): any;
         code: ProgramStatment;
         global_variables: ProgramStatment[];
+        requires: ProgramStatment[];
         code_string: string;
         extensionPath: string;
     }
@@ -18,6 +19,6 @@ console.log(tsvscode);
 console.log(window.extensionPath);
 
 ReactDOM.render(
-    <App code={window.code} global_variables={window.global_variables} />,
+    <App code={window.code} global_variables={window.global_variables} requires={window.requires} />,
     document.getElementById('root')
 );

@@ -1,6 +1,6 @@
 import { Node } from "acorn";
 import { useState } from "react";
-import { IVariable } from "./types/types";
+import { IVariable } from "./types/interface";
 
 export const parseParams = (params: any) => {
   let dataset: IVariable[] = [];
@@ -13,14 +13,22 @@ export const parseParams = (params: any) => {
 };
 
 export const convert_value = (value: string) => {
-  if (value === `true`) {
-    return true;
-  } else if (value === `flase`) {
-    return false;
-  } else if (!Number.isNaN(Number(value))) {
-    return Number(value);
-  } else {
-    return value;
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    if (value.startsWith("[") && value.endsWith("]")) {
+      const inner = value.substring(1, value.length - 2);
+
+      return inner.split(",");
+    } else if (value === `true`) {
+      return true;
+    } else if (value === `false`) {
+      return false;
+    } else if (!Number.isNaN(Number(value))) {
+      return Number(value);
+    } else {
+      return value;
+    }
   }
 };
 
@@ -50,22 +58,47 @@ export const make_global = (globals: any[]) => {
   return ast;
 };
 
-export const make_function_call = (name: string) => {
+export const make_function_call = (name: string, variables: Array<Node>) => {
+  const convertedValues = variables.map((el) => ({
+    type: "Literal",
+    //@ts-ignore
+    value: el.value,
+    //@ts-ignore
+    raw: "'" + el.value + "'",
+  }));
+
   const function_call = {
+    type: "CallExpression",
+    callee: {
+      type: "Identifier",
+      name,
+    },
+    arguments: [...convertedValues],
+  };
+
+  const l = {
     type: "ExpressionStatement",
     expression: {
       type: "CallExpression",
       callee: {
-        type: "Identifier",
-        name,
+        type: "MemberExpression",
+        object: {
+          type: "Identifier",
+          name: "console",
+        },
+        property: {
+          type: "Identifier",
+          name: "log",
+        },
       },
-      arguments: [],
+      arguments: [function_call],
     },
   };
+
   const ast: Node = {
     type: "Program",
     // @ts-ignore
-    body: [function_call],
+    body: [l],
   };
 
   return ast;

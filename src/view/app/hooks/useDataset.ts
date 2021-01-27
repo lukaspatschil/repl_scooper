@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IDataSet } from '../types/types';
+import { IDataSet } from '../types/interface';
 import { parseParams } from '../util';
 
 export const useDataset = (code: any) => {
@@ -11,4 +11,4 @@ export const useDataset = (code: any) => {
   };
 
   return [datasets, addDataSet] as const;
-}
+};

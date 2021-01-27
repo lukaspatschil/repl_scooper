@@ -6,6 +6,6 @@ const useFilewriter = (initialData?: string) => {
   };
 
   return writeToFile;
-}
+};
 
 export default useFilewriter;

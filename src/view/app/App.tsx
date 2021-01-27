@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import Code from './components/Code';
 import { Output } from './components/Output';
 import Variable from './components/Variable';
@@ -9,9 +9,11 @@ import { useForceUpdate } from './util';
 
 export const App: FunctionComponent<{
   code: any,
-  global_variables: Array<any>
-}> = ({ code, global_variables }) => {
-  const [setVariable, globals, setGlobal, setCode, output] = useCode(code, global_variables);
+  global_variables: Array<any>,
+  requires: Array<any>
+}> = ({ code, global_variables, requires }) => {
+  const [output, setOutput] = useState(null);
+  const [setVariable, globals, setGlobal, setCode,] = useCode(code, global_variables, requires);
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();
 
@@ -19,9 +21,19 @@ export const App: FunctionComponent<{
   window.addEventListener('message', event => {
     const message = event.data;
 
-    setCode(message.code, message.global_variables);
-    window.code_string = message.code_string;
-    forceUpdate();
+    switch (message.command) {
+      case 'update':
+        setCode(message.code, message.global_variables);
+        window.code_string = message.code_string;
+        forceUpdate();
+        break;
+      case 'output':
+        //? too many updates?
+        setOutput(message.output);
+        break;
+      default:
+        break;
+    }
   });
 
   useEffect(() => {
