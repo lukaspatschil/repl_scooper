@@ -13,7 +13,7 @@ export const App: FunctionComponent<{
   requires: Array<any>
 }> = ({ code, global_variables, requires }) => {
   const [output, setOutput] = useState(null);
-  const [setVariable, globals, setGlobal, setCode, test] = useCode(code, global_variables, requires);
+  const [setVariable, globals, setGlobal, setCode,] = useCode(code, global_variables, requires);
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();
 
