@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import Code from './components/Code';
 import { Output } from './components/Output';
 import Variable from './components/Variable';
@@ -12,7 +12,8 @@ export const App: FunctionComponent<{
   global_variables: Array<any>,
   requires: Array<any>
 }> = ({ code, global_variables, requires }) => {
-  const [setVariable, globals, setGlobal, setCode, output] = useCode(code, global_variables, requires);
+  const [output, setOutput] = useState(null);
+  const [setVariable, globals, setGlobal, setCode, test] = useCode(code, global_variables, requires);
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();
 
@@ -20,9 +21,19 @@ export const App: FunctionComponent<{
   window.addEventListener('message', event => {
     const message = event.data;
 
-    setCode(message.code, message.global_variables);
-    window.code_string = message.code_string;
-    forceUpdate();
+    switch (message.command) {
+      case 'update':
+        setCode(message.code, message.global_variables);
+        window.code_string = message.code_string;
+        forceUpdate();
+        break;
+      case 'output':
+        console.log(message.output);
+        setOutput(message.output);
+        break;
+      default:
+        break;
+    }
   });
 
   useEffect(() => {

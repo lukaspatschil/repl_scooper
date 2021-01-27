@@ -75,6 +75,7 @@ export default class ViewLoader {
     // send new message to the webview with the updated values
     if (this._panel) {
       this._panel.webview.postMessage({
+        command: "update",
         code,
         global_variables,
         code_string,
@@ -108,6 +109,12 @@ export default class ViewLoader {
       console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
       if (error !== null) {
         console.error(`exec error: ${error}`);
+      }
+      if (this._panel) {
+        this._panel.webview.postMessage({
+          command: "output",
+          output: parts[parts.length > 1 ? parts.length - 2 : 0],
+        });
       }
 
       //! add in final build
