@@ -67,8 +67,6 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
     raw: "'" + el.value + "'",
   }));
 
-  console.log(values);
-
   const function_call = {
     type: "CallExpression",
     callee: {
