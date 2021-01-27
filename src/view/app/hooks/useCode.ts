@@ -36,13 +36,11 @@ export const useCode = (
     // @ts-ignore
     const require_string = generate(requires_ast);
 
-    console.log(require_string);
-
     const func = new Function(
       `${require_string}\n${global_string}\nconsole.log((${generated})())`
     );
 
-    const function_call = make_function_call(estree?.id?.name);
+    const function_call = make_function_call(estree?.id?.name, variables);
     // @ts-ignore
     const something = generate(function_call);
 

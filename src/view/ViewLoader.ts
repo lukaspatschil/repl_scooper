@@ -4,7 +4,6 @@ import { exec } from "child_process";
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import * as path from "path";
 import { join } from "path";
-import { stderr } from "process";
 import * as vscode from "vscode";
 import { getRange } from "../utils";
 
