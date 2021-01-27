@@ -59,7 +59,7 @@ export const make_global = (globals: any[]) => {
 };
 
 export const make_function_call = (name: string, variables: Array<Node>) => {
-  const values = variables.map((el) => ({
+  const convertedValues = variables.map((el) => ({
     type: "Literal",
     //@ts-ignore
     value: el.value,
@@ -75,7 +75,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
       type: "Identifier",
       name,
     },
-    arguments: [...values],
+    arguments: [...convertedValues],
   };
 
   const l = {

@@ -28,7 +28,7 @@ export const App: FunctionComponent<{
         forceUpdate();
         break;
       case 'output':
-        console.log(message.output);
+        //? too many updates?
         setOutput(message.output);
         break;
       default:

@@ -113,7 +113,10 @@ export default class ViewLoader {
       if (this._panel) {
         this._panel.webview.postMessage({
           command: "output",
-          output: parts[parts.length > 1 ? parts.length - 2 : 0],
+          output:
+            error !== null
+              ? error.message
+              : parts[parts.length > 1 ? parts.length - 2 : 0],
         });
       }
 
