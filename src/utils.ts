@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 //@ts-ignore
 import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import { stat } from "fs";
 
 export function getPaths(
   panel: vscode.WebviewPanel,
@@ -22,21 +23,22 @@ export function getPaths(
 
 export function parserFunction(
   program: ProgramStatment[],
-  user_line: number
+  user_loc: vscode.Range
 ): ProgramStatment | undefined {
-  for (const statment of program) {
-    if (
-      user_line >= statment.loc.start.line &&
-      user_line <= statment.loc.end.line
-    ) {
-      if (statment.type === "FunctionDeclaration") {
-        if (statment?.body?.type === "BlockStatement") {
-          const tmp = parserFunction(statment.body.body, user_line);
+  for (const statement of program) {
+    const statment_loc = new vscode.Range(
+      new vscode.Position(statement.loc.start.line, statement.loc.start.colum),
+      new vscode.Position(statement.loc.end.line, statement.loc.end.colum)
+    );
+    if (inRange(user_loc, statment_loc)) {
+      if (statement.type === "FunctionDeclaration") {
+        if (statement?.body?.type === "BlockStatement") {
+          const tmp = parserFunction(statement.body.body, user_loc);
           if (tmp) {
             return tmp;
           }
         }
-        return statment;
+        return statement;
       } else {
         return undefined;
       }
@@ -46,9 +48,43 @@ export function parserFunction(
 
 export function parserCommands(
   program: ProgramStatment[],
-  user_line: number
+  user_loc: vscode.Range
 ): ProgramStatment | undefined {
-  return undefined;
+  for (const statement of program) {
+    const statment_loc = new vscode.Range(
+      new vscode.Position(
+        statement.loc.start.line,
+        statement.loc.start.character
+      ),
+      new vscode.Position(statement.loc.end.line, statement.loc.end.character)
+    );
+    if (inRange(user_loc, statment_loc)) {
+      return statement;
+    }
+  }
+}
+
+function inRange(user_loc: vscode.Range, statment_loc: vscode.Range) {
+  if (
+    user_loc.start.line >= statment_loc.start.line &&
+    user_loc.end.line <= statment_loc.end.line
+  ) {
+    if (user_loc.start.line === statment_loc.start.line) {
+      if (user_loc.start.character <= statment_loc.start.character) {
+        return false;
+      }
+    }
+
+    if (user_loc.end.line === statment_loc.end.line) {
+      if (user_loc.end.character <= statment_loc.end.character) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
 }
 
 export function requiresVariables(

@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import {
   getRange,
   globalVariables,
+  parserCommands,
   parserFunction,
   requiresVariables,
 } from "./utils";
@@ -38,10 +39,20 @@ export function activate(context: vscode.ExtensionContext) {
 
     // fix position, as vscode begins at 0, 0 and eslint alt 1, 0
     const user_line = position?.line ? position.line + 1 : -1;
+    const user_pos = new vscode.Range(
+      new vscode.Position(
+        (position?.line ?? -2) + 1,
+        (position?.character ?? -2) + 1
+      ),
+      new vscode.Position(
+        (position?.line ?? -2) + 1,
+        (position?.character ?? -2) + 1
+      )
+    );
 
     // iterate over all the functions
     //@ts-ignore
-    const active_function = parserFunction(acorn_prog.body, user_line);
+    const active_function = parserFunction(acorn_prog.body, user_pos);
     //@ts-ignore
     const global_variables = globalVariables(acorn_prog.body, user_line);
 
@@ -105,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
       const editor = vscode.window.activeTextEditor;
 
       // getting the cursor position from the user
-      const position = editor?.selection?.active;
+      const position = editor?.selection;
 
       // reading the whole file as a string
       // TODO add validation and only allow js and ts
@@ -121,7 +132,19 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       // fix position, as vscode begins at 0, 0 and eslint alt 1,0
-      const user_line = position?.line ? position.line + 1 : -1;
+      const user_loc = new vscode.Range(
+        new vscode.Position(
+          (position?.start?.line ?? -2) + 1,
+          (position?.start?.character ?? -2) + 1
+        ),
+        new vscode.Position(
+          (position?.end?.line ?? -2) + 1,
+          (position?.end?.character ?? -2) + 1
+        )
+      );
+
+      //@ts-ignore
+      const active_command = parserCommands(program.body, user_loc);
 
       console.log(program);
     }

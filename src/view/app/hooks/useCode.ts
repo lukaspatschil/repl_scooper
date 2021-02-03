@@ -1,6 +1,6 @@
 import { generate } from "astring";
 import { useDebugValue, useEffect, useState } from "react";
-import { make_function_call, make_global, make_promise } from "../util";
+import { make_global, make_promise } from "../util";
 import useFilewriter from "./useFilewriter";
 
 export const useCode = (
@@ -36,11 +36,9 @@ export const useCode = (
     // @ts-ignore
     const require_string = generate(requires_ast);
 
-    const function_call = make_function_call(estree?.id?.name, variables);
-
-    const new_call = make_promise(estree?.id?.name, variables);
+    const function_call = make_promise(estree?.id?.name, variables);
     // @ts-ignore
-    const something = generate(new_call);
+    const something = generate(function_call);
 
     const fileString = `${require_string}\n${global_string}\n${generated}\n${something}`;
 

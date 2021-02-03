@@ -64,7 +64,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: " + el.value + ",
+    raw: `"${el.value}"`,
   }));
 
   const function_call = {
@@ -110,6 +110,14 @@ export const useForceUpdate = () => {
 };
 
 export const make_promise = (function_name: string, function_args: any[]) => {
+  const convertedValues = function_args.map((el) => ({
+    type: "Literal",
+    //@ts-ignore
+    value: el.value,
+    //@ts-ignore
+    raw: `"${el.value}"`,
+  }));
+
   const promise = {
     type: "ExpressionStatement",
     expression: {
@@ -142,7 +150,7 @@ export const make_promise = (function_name: string, function_args: any[]) => {
                     type: "Identifier",
                     name: function_name,
                   },
-                  arguments: [...function_args],
+                  arguments: [...convertedValues],
                   optional: false,
                 },
               ],
