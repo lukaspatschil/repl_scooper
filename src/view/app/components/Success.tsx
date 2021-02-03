@@ -5,12 +5,10 @@ const successMessage = {
 };
 
 export const Success: FunctionComponent = ({ children }) => {
-  console.log(children);
-
   return (
     <Fragment>
       <span style={successMessage}>Success:&nbsp;</span>
-        {children}
+      {children}
       <span style={successMessage}>&nbsp;end</span>
     </Fragment>
   );

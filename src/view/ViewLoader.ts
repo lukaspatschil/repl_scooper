@@ -123,10 +123,6 @@ export default class ViewLoader {
       //! add in final build
       // unlinkSync(filePath);
     });
-
-    // vscode.window.showInformationMessage(
-    //   `👍 Configuration saved to ${this._extensionPath}`
-    // );
   }
 
   private getWebviewContent(

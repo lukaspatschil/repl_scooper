@@ -16,7 +16,6 @@ declare global {
 }
 
 console.log(tsvscode);
-console.log(window.extensionPath);
 
 ReactDOM.render(
     <App code={window.code} global_variables={window.global_variables} requires={window.requires} />,

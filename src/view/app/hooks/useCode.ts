@@ -8,11 +8,11 @@ export const useCode = (
   global: Array<any>,
   requires: Array<any>
 ) => {
-  const [estree, setEstree] = useState(code);
   const [variables, setVariables] = useState(code?.params);
   const [globals, setGlobals] = useState(global);
   const [generated, setGenerated] = useState<string>("");
   const [output, setOutput] = useState<any>(undefined);
+  const [estree, setEstree] = useState(code);
   const writeToFile = useFilewriter();
 
   useEffect(() => {
@@ -36,10 +36,6 @@ export const useCode = (
     // @ts-ignore
     const require_string = generate(requires_ast);
 
-    const func = new Function(
-      `${require_string}\n${global_string}\nconsole.log((${generated})())`
-    );
-
     const function_call = make_function_call(estree?.id?.name, variables);
     // @ts-ignore
     const something = generate(function_call);
@@ -47,14 +43,6 @@ export const useCode = (
     const fileString = `${require_string}\n${global_string}\n${generated}\n${something}`;
 
     writeToFile(fileString);
-
-    try {
-      // @ts-ignore
-      setOutput(Reflect.apply(func, undefined, values));
-    } catch (err) {
-      console.log(err);
-      setOutput(err.toString());
-    }
   };
 
   const setVariable = (name: string, value: any) => {
