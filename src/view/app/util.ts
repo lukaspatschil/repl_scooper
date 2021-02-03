@@ -1,4 +1,4 @@
-import { Node } from "acorn";
+import type { Node } from "acorn";
 import { useState } from "react";
 import { IVariable } from "./types/interface";
 
@@ -64,7 +64,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: "'" + el.value + "'",
+    raw: " + el.value + ",
   }));
 
   const function_call = {
@@ -84,7 +84,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
         type: "MemberExpression",
         object: {
           type: "Identifier",
-          name: "console",
+          name: console,
         },
         property: {
           type: "Identifier",
@@ -107,4 +107,148 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
 export const useForceUpdate = () => {
   const [, setValue] = useState(0); // integer state
   return () => setValue((value) => value + 1); // update the state to force render
+};
+
+export const make_promise = (function_name: string, function_args: any[]) => {
+  const promise = {
+    type: "ExpressionStatement",
+    expression: {
+      type: "CallExpression",
+      callee: {
+        type: "MemberExpression",
+        object: {
+          type: "CallExpression",
+          callee: {
+            type: "MemberExpression",
+            object: {
+              type: "CallExpression",
+              callee: {
+                type: "MemberExpression",
+                object: {
+                  type: "Identifier",
+                  name: "Promise",
+                },
+                property: {
+                  type: "Identifier",
+                  name: "resolve",
+                },
+                computed: false,
+                optional: false,
+              },
+              arguments: [
+                {
+                  type: "CallExpression",
+                  callee: {
+                    type: "Identifier",
+                    name: function_name,
+                  },
+                  arguments: [...function_args],
+                  optional: false,
+                },
+              ],
+              optional: false,
+            },
+            property: {
+              type: "Identifier",
+              name: "then",
+            },
+            computed: false,
+            optional: false,
+          },
+          arguments: [
+            {
+              type: "ArrowFunctionExpression",
+              id: null,
+              expression: true,
+              generator: false,
+              async: false,
+              params: [
+                {
+                  type: "Identifier",
+                  name: "data",
+                },
+              ],
+              body: {
+                type: "CallExpression",
+                callee: {
+                  type: "MemberExpression",
+                  object: {
+                    type: "Identifier",
+                    name: "console",
+                  },
+                  property: {
+                    type: "Identifier",
+                    name: "log",
+                  },
+                  computed: false,
+                  optional: false,
+                },
+                arguments: [
+                  {
+                    type: "Identifier",
+                    name: "data",
+                  },
+                ],
+                optional: false,
+              },
+            },
+          ],
+          optional: false,
+        },
+        property: {
+          type: "Identifier",
+          name: "catch",
+        },
+        computed: false,
+        optional: false,
+      },
+      arguments: [
+        {
+          type: "ArrowFunctionExpression",
+          id: null,
+          expression: true,
+          generator: false,
+          async: false,
+          params: [
+            {
+              type: "Identifier",
+              name: "error",
+            },
+          ],
+          body: {
+            type: "CallExpression",
+            callee: {
+              type: "MemberExpression",
+              object: {
+                type: "Identifier",
+                name: "console",
+              },
+              property: {
+                type: "Identifier",
+                name: "log",
+              },
+              computed: false,
+              optional: false,
+            },
+            arguments: [
+              {
+                type: "Identifier",
+                name: "error",
+              },
+            ],
+            optional: false,
+          },
+        },
+      ],
+      optional: false,
+    },
+  };
+
+  const ast: Node = {
+    type: "Program",
+    // @ts-ignore
+    body: [promise],
+  };
+
+  return ast;
 };
