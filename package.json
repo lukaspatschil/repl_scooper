@@ -3,6 +3,11 @@
   "publisher": "LukasSpatschil",
   "displayName": "REPL Scooper",
   "description": "A methode to experiment with code snippets",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukaspatschil/repl-scooper"
+  },
+  "license": "MIT",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.48.0"

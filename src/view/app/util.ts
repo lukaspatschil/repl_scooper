@@ -64,7 +64,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: `"${el.value}"`,
+    raw: typeof el.value === "string" ? `"${el.value}"` : `${el.value}`,
   }));
 
   const function_call = {
@@ -115,7 +115,7 @@ export const make_promise = (function_name: string, function_args: any[]) => {
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: `"${el.value}"`,
+    raw: typeof el.value === "string" ? `"${el.value}"` : `${el.value}`,
   }));
 
   const promise = {
