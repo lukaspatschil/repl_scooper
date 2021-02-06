@@ -59,6 +59,17 @@ export function parserCommands(
       new vscode.Position(statement.loc.end.line, statement.loc.end.character)
     );
     if (inRange(user_loc, statment_loc)) {
+      let next_statment = statement;
+      while (!Array.isArray(next_statment?.body)) {
+        if (next_statment?.body) {
+          next_statment = next_statment?.body;
+        } else {
+          break;
+        }
+      }
+      if (Array.isArray(next_statment?.body)) {
+        return parserCommands(next_statment.body, user_loc);
+      }
       return statement;
     }
   }

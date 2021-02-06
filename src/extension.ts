@@ -124,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       // parse the source code
       // TODO only if the input is valid (try catch?)
-      const program = parse(source ? source : "", {
+      const acorn_prog = parse(source ? source : "", {
         ecmaVersion: "latest",
         allowImportExportEverywhere: true,
         allowAwaitOutsideFunction: true,
@@ -143,10 +143,41 @@ export function activate(context: vscode.ExtensionContext) {
         )
       );
 
-      //@ts-ignore
-      const active_command = parserCommands(program.body, user_loc);
+      try {
+        //@ts-ignore
+        const active_command = parserCommands(acorn_prog.body, user_loc);
 
-      console.log(program);
+        const global_variables = globalVariables(
+          //@ts-ignore
+          acorn_prog.body,
+          user_loc.start.line
+        );
+
+        const requires = requiresVariables(
+          //@ts-ignore
+          acorn_prog.body,
+          user_loc.start.line
+        );
+
+        const active_folder = vscode.workspace.workspaceFolders;
+
+        const range = getRange(active_command);
+        const source_string = editor?.document.getText(range);
+
+        if (editor) {
+          const view = new ViewLoader(
+            context.extensionPath,
+            active_command,
+            global_variables,
+            requires,
+            source_string ? source_string : "",
+            editor,
+            active_folder
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   );
 
