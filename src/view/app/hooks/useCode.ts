@@ -8,7 +8,7 @@ export const useCode = (
   global: Array<any>,
   requires: Array<any>
 ) => {
-  const [variables, setVariables] = useState(code?.params);
+  const [variables, setVariables] = useState<any[]>(code?.params);
   const [globals, setGlobals] = useState(global);
   const [generated, setGenerated] = useState<string>("");
   const [output] = useState<any>(undefined);

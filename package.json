@@ -1,5 +1,6 @@
 {
   "name": "repl-scooper",
+  "publisher": "LukasSpatschil",
   "displayName": "REPL Scooper",
   "description": "A methode to experiment with code snippets",
   "version": "0.0.1",
@@ -18,12 +19,12 @@
     "commands": [
       {
         "command": "extension.replscooper",
-        "title": "Open REPL Window",
+        "title": "function",
         "category": "REPL Scooper"
       },
       {
         "command": "extension.replcommand",
-        "title": "Open REPL Command",
+        "title": "command",
         "category": "REPL Scooper"
       }
     ]
