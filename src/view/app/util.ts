@@ -1,9 +1,13 @@
+import { IVariable } from "./types/interface";
 import type { Node } from "acorn";
 import { useState } from "react";
-import { IVariable } from "./types/interface";
 
-export const parseParams = (params: any) => {
+export const parseParams = (params: any[]) => {
   let dataset: IVariable[] = [];
+
+  if (!Array.isArray(params)) {
+    return dataset;
+  }
 
   for (let variable of params) {
     dataset = [...dataset, { name: variable.name } as IVariable];
@@ -107,6 +111,28 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
 export const useForceUpdate = () => {
   const [, setValue] = useState(0); // integer state
   return () => setValue((value) => value + 1); // update the state to force render
+};
+
+export const make_clg = (name: string, estree: any) => {
+  console.log(JSON.stringify(estree));
+  return {
+    type: "CallExpression",
+    callee: {
+      type: "MemberExpression",
+      object: {
+        type: "Identifier",
+        name: "console",
+      },
+      property: {
+        type: "Identifier",
+        name: "log",
+      },
+      computed: false,
+      optional: false,
+    },
+    arguments: [estree?.expression],
+    optional: false,
+  };
 };
 
 export const make_promise = (function_name: string, function_args: any[]) => {

@@ -1,6 +1,7 @@
-import { generate } from "astring";
+import { make_clg, make_global, make_promise } from "../util";
 import { useDebugValue, useEffect, useState } from "react";
-import { make_global, make_promise } from "../util";
+
+import { generate } from "astring";
 import useFilewriter from "./useFilewriter";
 
 export const useCode = (
@@ -24,7 +25,7 @@ export const useCode = (
   const updateOutput = () => {
     const values: Array<any> = [];
 
-    variables.forEach((el: { value: any }) => values.push(el?.value));
+    variables?.forEach((el: { value: any }) => values.push(el?.value));
 
     const ast = make_global(globals);
 
@@ -36,11 +37,20 @@ export const useCode = (
     // @ts-ignore
     const require_string = generate(requires_ast);
 
-    const function_call = make_promise(estree?.id?.name, variables);
-    // @ts-ignore
-    const something = generate(function_call);
+    let fileString: string;
 
-    const fileString = `${require_string}\n${global_string}\n${generated}\n${something}`;
+    if (variables) {
+      const function_call = make_promise(estree?.id?.name, variables ?? []);
+      // @ts-ignore
+      const something = generate(function_call);
+
+      fileString = `${require_string}\n${global_string}\n${generated}\n${something}`;
+    } else {
+      const call = make_clg(generated, estree);
+      // @ts-ignore
+      const something = generate(call);
+      fileString = `${require_string}\n${global_string}\n${something}`;
+    }
 
     writeToFile(fileString);
   };

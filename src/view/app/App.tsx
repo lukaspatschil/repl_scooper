@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
+
 import Code from './components/Code';
 import { Output } from './components/Output';
 import Variable from './components/Variable';
@@ -45,12 +46,12 @@ export const App: FunctionComponent<{
       <h1>REPL Code</h1>
       <section>
         <h2>Your global variables:</h2>
-        {globals && globals.map(el => <Variable key={el?.declarations[0]?.id?.name} name={el?.declarations[0]?.id?.name} preValue={el?.declarations[0]?.init?.value} updateValue={setGlobal} />)}
+        {Array.isArray(globals) && globals.map(el => <Variable key={el?.declarations[0]?.id?.name} name={el?.declarations[0]?.id?.name} preValue={el?.declarations[0]?.init?.value} updateValue={setGlobal} />)}
       </section>
       <section>
         <h2>Your function variables:</h2>
         <button onClick={addDataSet}>add set</button>
-        {datasets && datasets.map((el, id) => <Variables variables={el.variables} setVariable={setVariable} identifier={id} key={id} />)}
+        {Array.isArray(datasets) && datasets.map((el, id) => <Variables variables={el.variables} setVariable={setVariable} identifier={id} key={id} />)}
       </section>
       <section>
         <h2>Your code:</h2>
