@@ -53,10 +53,10 @@ export const App: FunctionComponent<{
         <button onClick={addDataSet}>add set</button>
         {Array.isArray(datasets) && datasets.map((el, id) => <Variables variables={el.variables} setVariable={setVariable} identifier={id} key={id} />)}
       </section>
-      <section>
+      {/* <section>
         <h2>Your code:</h2>
         <Code code={window.code_string ? window.code_string : ""} />
-      </section>
+      </section> */}
       <section>
         <h2>Your output:</h2>
         <Output value={output} />

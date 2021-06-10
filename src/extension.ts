@@ -1,7 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { parse } from "acorn";
+
 import * as vscode from "vscode";
+
 import {
   getRange,
   globalVariables,
@@ -9,7 +10,9 @@ import {
   parserFunction,
   requiresVariables,
 } from "./utils";
+
 import ViewLoader from "./view/ViewLoader";
+import { parse } from "acorn";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -60,6 +63,12 @@ export function activate(context: vscode.ExtensionContext) {
     const requires = requiresVariables(acorn_prog.body, user_line);
 
     const active_folder = vscode.workspace.workspaceFolders;
+
+    if (!active_folder) {
+      const message = "REPL Scooper: Working folder not found, open a folder an try again" ;
+      vscode.window.showErrorMessage(message);
+      throw new Error(message);
+    }
 
     // get the whole function
     let range: vscode.Range;

@@ -31,7 +31,7 @@ export default class ViewLoader {
     this._activeFolder = active_folder ?? undefined;
 
     const ranges: vscode.Range[] = [getRange(code)];
-    this.decorate(editor, ranges, this.activeDecorationType);
+    this.decorateTextEditor(editor, ranges, this.activeDecorationType);
 
     this._panel = vscode.window.createWebviewPanel(
       "replWebview",
@@ -166,7 +166,7 @@ export default class ViewLoader {
     </html>`;
   }
 
-  private decorate(
+  private decorateTextEditor(
     editor: vscode.TextEditor,
     range: vscode.Range[],
     decoration: vscode.TextEditorDecorationType
