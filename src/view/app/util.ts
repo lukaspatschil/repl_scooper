@@ -20,19 +20,7 @@ export const convert_value = (value: string) => {
   try {
     return JSON.parse(value);
   } catch (error) {
-    if (value.startsWith("[") && value.endsWith("]")) {
-      const inner = value.substring(1, value.length - 2);
-
-      return inner.split(",");
-    } else if (value === `true`) {
-      return true;
-    } else if (value === `false`) {
-      return false;
-    } else if (!Number.isNaN(Number(value))) {
-      return Number(value);
-    } else {
-      return value;
-    }
+    return value;
   }
 };
 
@@ -68,7 +56,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: typeof el.value === "string" ? `"${el.value}"` : `${el.value}`,
+    raw: typeof el.value === "string" ? `'${el.value}'` : `${el.value}`,
   }));
 
   const function_call = {

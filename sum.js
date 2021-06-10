@@ -7,7 +7,7 @@ function sum(a, b, c) {
   function asd1(params) {
     function name1(params) {
       function name2(params) {
-        return test123;
+        return test123.filter(el => el === 'a');
       }
       return null;
     }

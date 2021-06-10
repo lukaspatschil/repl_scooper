@@ -22,6 +22,7 @@
     "**/view/app/App.tsx",
     "**/view/app/components/**",
     "sum.ts",
-    "**/asthero"
+    "**/asthero",
+    ".vscode"
   ]
 }

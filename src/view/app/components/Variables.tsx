@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, FunctionComponent } from 'react';
-import { IVariable } from '../types/interface';
-import { parseParams } from '../util';
+import React, { FunctionComponent, useEffect, useRef, useState } from 'react';
 
+import { IVariable } from '../types/interface';
 import Variable from './Variable';
+import { parseParams } from '../util';
 
 const Variables: FunctionComponent<{ variables: IVariable[], setVariable: (name: string, value: any) => void, identifier: number }> = ({ variables, setVariable, identifier }) => {
   const [values, setValues] = useState<IVariable[]>([]);

@@ -1,11 +1,11 @@
-//@ts-ignore
-import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
-import { exec } from "child_process";
-import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import * as path from "path";
-import { join } from "path";
 import * as vscode from "vscode";
+
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
+
+import { exec } from "child_process";
 import { getRange } from "../utils";
+import { join } from "path";
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
@@ -19,9 +19,9 @@ export default class ViewLoader {
 
   constructor(
     extensionPath: string,
-    code: ProgramStatment,
-    global_variables: ProgramStatment[],
-    requires: ProgramStatment[],
+    code: any,
+    global_variables: any[],
+    requires: any[],
     code_string: string,
     editor: vscode.TextEditor,
     active_folder: readonly vscode.WorkspaceFolder[] | undefined
@@ -58,7 +58,10 @@ export default class ViewLoader {
         case "SaveIt":
           this.saveFileContent(value);
           return;
+        default:
+          throw new Error(`REPL Scooper: There is no command named ${command}`);
       }
+      
     });
 
     // remove the text decoration on the selected function / code segment
@@ -68,8 +71,8 @@ export default class ViewLoader {
   }
 
   updateWebviewContent(
-    code: ProgramStatment,
-    global_variables: ProgramStatment[],
+    code: any,
+    global_variables: any[],
     code_string: string
   ) {
     // send new message to the webview with the updated values
@@ -104,9 +107,9 @@ export default class ViewLoader {
 
     const child = exec(`node ${filePath}`, (error, stdout, stderr) => {
       const parts = stdout.split("\n");
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-      console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
+      // console.log(`stdout: ${stdout}`);
+      // console.log(`stderr: ${stderr}`);
+      // console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
       if (error !== null) {
         console.error(`exec error: ${error}`);
       }
@@ -120,15 +123,14 @@ export default class ViewLoader {
         });
       }
 
-      //! add in final build
       // unlinkSync(filePath);
     });
   }
 
   private getWebviewContent(
-    code: ProgramStatment,
-    global_variables: ProgramStatment[],
-    requires: ProgramStatment[],
+    code: any,
+    global_variables: any[],
+    requires: any[],
     code_string: string
   ): string {
     const reactAppPathOnDisk = vscode.Uri.file(
