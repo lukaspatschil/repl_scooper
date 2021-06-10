@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 
-import Code from './components/Code';
 import { Output } from './components/Output';
 import Variable from './components/Variable';
 import Variables from './components/Variables';
@@ -53,10 +52,6 @@ export const App: FunctionComponent<{
         <button onClick={addDataSet}>add set</button>
         {Array.isArray(datasets) && datasets.map((el, id) => <Variables variables={el.variables} setVariable={setVariable} identifier={id} key={id} />)}
       </section>
-      {/* <section>
-        <h2>Your code:</h2>
-        <Code code={window.code_string ? window.code_string : ""} />
-      </section> */}
       <section>
         <h2>Your output:</h2>
         <Output value={output} />
