@@ -128,8 +128,18 @@ export function getGlobalVariables(program: acorn.Node): acorn.Node[] {
   return variables;
 }
 
-export function getGlobalScope(program: acorn.Node) {
-  
+export function getGlobalScope(program: acorn.Node, userLine: number) {
+  const scope: acorn.Node[] = [];
+
+  walk.ancestor(program, {
+    FunctionDeclaration(node, ancestor) {
+      if ((ancestor as any[]).length === 2 && (node.loc?.end?.line ?? 0) < userLine) {
+        scope.push(node);
+      }
+    }
+  });
+
+  return scope;
 }
 
 export function getRange(active_function: any): vscode.Range {

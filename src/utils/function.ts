@@ -46,8 +46,10 @@ export function func(context: vscode.ExtensionContext) {
   // iterate over all the functions
   //@ts-ignore
   const active_function = parserFunction(acorn_prog.body, user_pos);
-  //@ts-ignore
   const globalVariables = getGlobalVariables(acorn_prog);
+  const globalScope = getGlobalScope(acorn_prog, user_line);
+
+  console.log(globalScope);
 
   //@ts-ignore
   const requires = requiresVariables(acorn_prog.body, user_line);
