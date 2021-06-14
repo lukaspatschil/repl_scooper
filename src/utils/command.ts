@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
 import {
+  getGlobalVariables,
   getRange,
-  globalVariables,
   parserCommands,
   requiresVariables,
 } from '../utils';
@@ -45,11 +45,7 @@ export function command(context: vscode.ExtensionContext) {
     //@ts-ignore
     const active_command = parserCommands(acorn_prog.body, user_loc);
 
-    const global_variables = globalVariables(
-      //@ts-ignore
-      acorn_prog.body,
-      user_loc.start.line
-    );
+    const globalVariables = getGlobalVariables(acorn_prog);
 
     const requires = requiresVariables(
       //@ts-ignore
@@ -66,7 +62,7 @@ export function command(context: vscode.ExtensionContext) {
       const view = new ViewLoader(
         context.extensionPath,
         active_command,
-        global_variables,
+        globalVariables,
         requires,
         source_string ? source_string : '',
         editor,
