@@ -63,6 +63,7 @@ export function command(context: vscode.ExtensionContext) {
         context.extensionPath,
         active_command,
         globalVariables,
+        [],
         requires,
         source_string ? source_string : '',
         editor,

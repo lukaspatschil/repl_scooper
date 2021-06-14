@@ -21,6 +21,7 @@ export default class ViewLoader {
     extensionPath: string,
     code: any,
     globalVariables: acorn.Node[],
+    globalScope: acorn.Node[],
     requires: any[],
     code_string: string,
     editor: vscode.TextEditor,
@@ -49,6 +50,7 @@ export default class ViewLoader {
     this._panel.webview.html = this.getWebviewContent(
       code,
       globalVariables,
+      globalScope,
       requires,
       code_string
     );
@@ -128,7 +130,8 @@ export default class ViewLoader {
 
   private getWebviewContent(
     code: any,
-    global_variables: any[],
+    globalVariables: acorn.Node[],
+    globalScope: acorn.Node[],
     requires: any[],
     code_string: string
   ): string {
@@ -154,7 +157,8 @@ export default class ViewLoader {
 				<script>
           const tsvscode = acquireVsCodeApi();
           window.code = ${JSON.stringify(code)};
-          window.global_variables = ${JSON.stringify(global_variables)};
+          window.global_variables = ${JSON.stringify(globalVariables)};
+          window.globalScope = ${JSON.stringify(globalScope)};
           window.requires = ${JSON.stringify(requires)};
           window.code_string = ${JSON.stringify(code_string)};
 				</script>

@@ -1,15 +1,17 @@
-import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
+import './index.css';
+
+import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from "./App";
-import './index.css';
+import acorn from 'acorn';
 
 declare global {
     interface Window {
         acquireVsCodeApi(): any;
-        code: ProgramStatment;
-        global_variables: ProgramStatment[];
-        requires: ProgramStatment[];
+        code: acorn.Node;
+        global_variables: acorn.Node[];
+        globalScope: acorn.Node[],
+        requires: acorn.Node[];
         code_string: string;
         extensionPath: string;
     }
@@ -18,6 +20,6 @@ declare global {
 console.log(tsvscode);
 
 ReactDOM.render(
-    <App code={window.code} global_variables={window.global_variables} requires={window.requires} />,
+    <App code={window.code} global_variables={window.global_variables} globalScope={window.globalScope} requires={window.requires} />,
     document.getElementById('root')
 );

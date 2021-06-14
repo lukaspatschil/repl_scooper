@@ -74,6 +74,7 @@ export function func(context: vscode.ExtensionContext) {
       context.extensionPath,
       active_function,
       globalVariables,
+      globalScope,
       requires,
       source_string ? source_string : '',
       editor,

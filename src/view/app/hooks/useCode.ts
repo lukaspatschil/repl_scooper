@@ -1,12 +1,14 @@
 import { make_clg, make_global, make_promise } from '../util';
 import { useDebugValue, useEffect, useState } from 'react';
 
+import acorn from 'acorn';
 import { generate } from 'astring';
 import useFilewriter from './useFilewriter';
 
 export const useCode = (
   code: any,
   global: Array<any>,
+  globalScope: acorn.Node[],
   requires: Array<any>
 ) => {
   const [variables, setVariables] = useState<any[]>(code?.params);
@@ -27,7 +29,7 @@ export const useCode = (
 
     variables?.forEach((el: { value: any }) => values.push(el?.value));
 
-    const ast = make_global(globals);
+    const ast = make_global([...globals, ...globalScope]);
 
     const requires_ast = make_global(requires);
 

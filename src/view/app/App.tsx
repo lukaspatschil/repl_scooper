@@ -3,6 +3,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import { Output } from './components/Output';
 import Variable from './components/Variable';
 import Variables from './components/Variables';
+import acorn from 'acorn';
 import { useCode } from './hooks/useCode';
 import { useDataset } from './hooks/useDataset';
 import { useForceUpdate } from './util';
@@ -10,10 +11,11 @@ import { useForceUpdate } from './util';
 export const App: FunctionComponent<{
   code: any,
   global_variables: Array<any>,
+  globalScope: acorn.Node[],
   requires: Array<any>
-}> = ({ code, global_variables, requires }) => {
+}> = ({ code, global_variables, globalScope, requires }) => {
   const [output, setOutput] = useState(null);
-  const [setVariable, globals, setGlobal, setCode,] = useCode(code, global_variables, requires);
+  const [setVariable, globals, setGlobal, setCode,] = useCode(code, global_variables, globalScope, requires);
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();
 
