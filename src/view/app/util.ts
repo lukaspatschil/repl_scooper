@@ -1,6 +1,6 @@
-import { IVariable } from "./types/interface";
-import type { Node } from "acorn";
-import { useState } from "react";
+import { IVariable } from './types/interface';
+import type { Node } from 'acorn';
+import { useState } from 'react';
 
 export const parseParams = (params: any[]) => {
   let dataset: IVariable[] = [];
@@ -26,20 +26,20 @@ export const convert_value = (value: string) => {
 
 export const get_type = (ts_type: any) => {
   switch (ts_type) {
-    case "TSNumberKeyword":
-      return "number";
-    case "TSStringKeyword":
-      return "string";
-    case "TSBooleanKeyword":
-      return "boolean";
+    case 'TSNumberKeyword':
+      return 'number';
+    case 'TSStringKeyword':
+      return 'string';
+    case 'TSBooleanKeyword':
+      return 'boolean';
     default:
-      return "unknown";
+      return 'unknown';
   }
 };
 
 export const make_global = (globals: any[]) => {
   const ast: Node = {
-    type: "Program",
+    type: 'Program',
     // @ts-ignore
     body: [],
   };
@@ -52,35 +52,35 @@ export const make_global = (globals: any[]) => {
 
 export const make_function_call = (name: string, variables: Array<Node>) => {
   const convertedValues = variables.map((el) => ({
-    type: "Literal",
+    type: 'Literal',
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: typeof el.value === "string" ? `'${el.value}'` : `${el.value}`,
+    raw: typeof el.value === 'string' ? `'${el.value}'` : `${el.value}`,
   }));
 
   const function_call = {
-    type: "CallExpression",
+    type: 'CallExpression',
     callee: {
-      type: "Identifier",
+      type: 'Identifier',
       name,
     },
     arguments: [...convertedValues],
   };
 
   const l = {
-    type: "ExpressionStatement",
+    type: 'ExpressionStatement',
     expression: {
-      type: "CallExpression",
+      type: 'CallExpression',
       callee: {
-        type: "MemberExpression",
+        type: 'MemberExpression',
         object: {
-          type: "Identifier",
+          type: 'Identifier',
           name: console,
         },
         property: {
-          type: "Identifier",
-          name: "log",
+          type: 'Identifier',
+          name: 'log',
         },
       },
       arguments: [function_call],
@@ -88,7 +88,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
   };
 
   const ast: Node = {
-    type: "Program",
+    type: 'Program',
     // @ts-ignore
     body: [l],
   };
@@ -104,16 +104,16 @@ export const useForceUpdate = () => {
 export const make_clg = (name: string, estree: any) => {
   console.log(JSON.stringify(estree));
   return {
-    type: "CallExpression",
+    type: 'CallExpression',
     callee: {
-      type: "MemberExpression",
+      type: 'MemberExpression',
       object: {
-        type: "Identifier",
-        name: "console",
+        type: 'Identifier',
+        name: 'console',
       },
       property: {
-        type: "Identifier",
-        name: "log",
+        type: 'Identifier',
+        name: 'log',
       },
       computed: false,
       optional: false,
@@ -125,43 +125,43 @@ export const make_clg = (name: string, estree: any) => {
 
 export const make_promise = (function_name: string, function_args: any[]) => {
   const convertedValues = function_args.map((el) => ({
-    type: "Literal",
+    type: 'Literal',
     //@ts-ignore
     value: el.value,
     //@ts-ignore
-    raw: typeof el.value === "string" ? `"${el.value}"` : `${el.value}`,
+    raw: typeof el.value === 'string' ? `"${el.value}"` : `${el.value}`,
   }));
 
   const promise = {
-    type: "ExpressionStatement",
+    type: 'ExpressionStatement',
     expression: {
-      type: "CallExpression",
+      type: 'CallExpression',
       callee: {
-        type: "MemberExpression",
+        type: 'MemberExpression',
         object: {
-          type: "CallExpression",
+          type: 'CallExpression',
           callee: {
-            type: "MemberExpression",
+            type: 'MemberExpression',
             object: {
-              type: "CallExpression",
+              type: 'CallExpression',
               callee: {
-                type: "MemberExpression",
+                type: 'MemberExpression',
                 object: {
-                  type: "Identifier",
-                  name: "Promise",
+                  type: 'Identifier',
+                  name: 'Promise',
                 },
                 property: {
-                  type: "Identifier",
-                  name: "resolve",
+                  type: 'Identifier',
+                  name: 'resolve',
                 },
                 computed: false,
                 optional: false,
               },
               arguments: [
                 {
-                  type: "CallExpression",
+                  type: 'CallExpression',
                   callee: {
-                    type: "Identifier",
+                    type: 'Identifier',
                     name: function_name,
                   },
                   arguments: [...convertedValues],
@@ -171,44 +171,44 @@ export const make_promise = (function_name: string, function_args: any[]) => {
               optional: false,
             },
             property: {
-              type: "Identifier",
-              name: "then",
+              type: 'Identifier',
+              name: 'then',
             },
             computed: false,
             optional: false,
           },
           arguments: [
             {
-              type: "ArrowFunctionExpression",
+              type: 'ArrowFunctionExpression',
               id: null,
               expression: true,
               generator: false,
               async: false,
               params: [
                 {
-                  type: "Identifier",
-                  name: "data",
+                  type: 'Identifier',
+                  name: 'data',
                 },
               ],
               body: {
-                type: "CallExpression",
+                type: 'CallExpression',
                 callee: {
-                  type: "MemberExpression",
+                  type: 'MemberExpression',
                   object: {
-                    type: "Identifier",
-                    name: "console",
+                    type: 'Identifier',
+                    name: 'console',
                   },
                   property: {
-                    type: "Identifier",
-                    name: "log",
+                    type: 'Identifier',
+                    name: 'log',
                   },
                   computed: false,
                   optional: false,
                 },
                 arguments: [
                   {
-                    type: "Identifier",
-                    name: "data",
+                    type: 'Identifier',
+                    name: 'data',
                   },
                 ],
                 optional: false,
@@ -218,44 +218,44 @@ export const make_promise = (function_name: string, function_args: any[]) => {
           optional: false,
         },
         property: {
-          type: "Identifier",
-          name: "catch",
+          type: 'Identifier',
+          name: 'catch',
         },
         computed: false,
         optional: false,
       },
       arguments: [
         {
-          type: "ArrowFunctionExpression",
+          type: 'ArrowFunctionExpression',
           id: null,
           expression: true,
           generator: false,
           async: false,
           params: [
             {
-              type: "Identifier",
-              name: "error",
+              type: 'Identifier',
+              name: 'error',
             },
           ],
           body: {
-            type: "CallExpression",
+            type: 'CallExpression',
             callee: {
-              type: "MemberExpression",
+              type: 'MemberExpression',
               object: {
-                type: "Identifier",
-                name: "console",
+                type: 'Identifier',
+                name: 'console',
               },
               property: {
-                type: "Identifier",
-                name: "log",
+                type: 'Identifier',
+                name: 'log',
               },
               computed: false,
               optional: false,
             },
             arguments: [
               {
-                type: "Identifier",
-                name: "error",
+                type: 'Identifier',
+                name: 'error',
               },
             ],
             optional: false,
@@ -267,7 +267,7 @@ export const make_promise = (function_name: string, function_args: any[]) => {
   };
 
   const ast: Node = {
-    type: "Program",
+    type: 'Program',
     // @ts-ignore
     body: [promise],
   };

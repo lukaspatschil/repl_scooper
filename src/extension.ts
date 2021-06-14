@@ -3,17 +3,8 @@
 
 import * as vscode from 'vscode';
 
-import {
-  getRange,
-  globalVariables,
-  parserFunction,
-  requiresVariables,
-} from './utils';
-
-import ViewLoader from './view/ViewLoader';
 import { command } from './utils/command';
 import { func } from './utils/function';
-import { parse } from 'acorn';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

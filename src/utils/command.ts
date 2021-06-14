@@ -1,14 +1,14 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
 import {
   getRange,
   globalVariables,
   parserCommands,
   requiresVariables,
-} from "../utils";
+} from '../utils';
 
-import ViewLoader from "../view/ViewLoader";
-import { parse } from "acorn";
+import ViewLoader from '../view/ViewLoader';
+import { parse } from 'acorn';
 
 export function command(context: vscode.ExtensionContext) {
   const editor = vscode.window.activeTextEditor;
@@ -22,8 +22,8 @@ export function command(context: vscode.ExtensionContext) {
 
   // parse the source code
   // TODO only if the input is valid (try catch?)
-  const acorn_prog = parse(source ? source : "", {
-    ecmaVersion: "latest",
+  const acorn_prog = parse(source ? source : '', {
+    ecmaVersion: 'latest',
     allowImportExportEverywhere: true,
     allowAwaitOutsideFunction: true,
     locations: true,
@@ -68,7 +68,7 @@ export function command(context: vscode.ExtensionContext) {
         active_command,
         global_variables,
         requires,
-        source_string ? source_string : "",
+        source_string ? source_string : '',
         editor,
         active_folder
       );

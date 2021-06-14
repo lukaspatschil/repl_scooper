@@ -1,8 +1,8 @@
-import { make_clg, make_global, make_promise } from "../util";
-import { useDebugValue, useEffect, useState } from "react";
+import { make_clg, make_global, make_promise } from '../util';
+import { useDebugValue, useEffect, useState } from 'react';
 
-import { generate } from "astring";
-import useFilewriter from "./useFilewriter";
+import { generate } from 'astring';
+import useFilewriter from './useFilewriter';
 
 export const useCode = (
   code: any,
@@ -11,7 +11,7 @@ export const useCode = (
 ) => {
   const [variables, setVariables] = useState<any[]>(code?.params);
   const [globals, setGlobals] = useState(global);
-  const [generated, setGenerated] = useState<string>("");
+  const [generated, setGenerated] = useState<string>('');
   const [output] = useState<any>(undefined);
   const [estree, setEstree] = useState(code);
   const writeToFile = useFilewriter();
@@ -73,7 +73,7 @@ export const useCode = (
 
     if (variable?.declarations[0]?.init) {
       variable.declarations[0].init.value = value;
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         variable.declarations[0].init.raw = `"${value}"`;
       } else {
         variable.declarations[0].init.raw = String(value);
@@ -89,7 +89,7 @@ export const useCode = (
     setGlobals(new_globals);
   };
 
-  useDebugValue(output || "Not generated");
+  useDebugValue(output || 'Not generated');
 
   return [setVariable, globals, setGlobal, setCode, output] as const;
 };

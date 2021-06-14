@@ -1,21 +1,20 @@
-import * as path from "path";
-import * as vscode from "vscode";
+import * as path from 'path';
+import * as vscode from 'vscode';
 
-import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
 
-import { exec } from "child_process";
-import { getRange } from "../utils";
-import { join } from "path";
+import { exec } from 'child_process';
+import { getRange } from '../utils';
+import { join } from 'path';
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
   private readonly _extensionPath: string;
   private readonly _activeFolder: readonly vscode.WorkspaceFolder[] | undefined;
-  private readonly activeDecorationType = vscode.window.createTextEditorDecorationType(
-    {
-      backgroundColor: "green",
-    }
-  );
+  private readonly activeDecorationType =
+    vscode.window.createTextEditorDecorationType({
+      backgroundColor: 'green',
+    });
 
   constructor(
     extensionPath: string,
@@ -34,14 +33,14 @@ export default class ViewLoader {
     this.decorateTextEditor(editor, ranges, this.activeDecorationType);
 
     this._panel = vscode.window.createWebviewPanel(
-      "replWebview",
-      "REPL Window",
+      'replWebview',
+      'REPL Window',
       vscode.ViewColumn.Beside,
       {
         enableScripts: true,
 
         localResourceRoots: [
-          vscode.Uri.file(path.join(extensionPath, "configViewer")),
+          vscode.Uri.file(path.join(extensionPath, 'configViewer')),
         ],
       }
     );
@@ -55,13 +54,12 @@ export default class ViewLoader {
 
     this._panel.webview.onDidReceiveMessage(({ command, value }) => {
       switch (command) {
-        case "SaveIt":
+        case 'SaveIt':
           this.saveFileContent(value);
           return;
         default:
           throw new Error(`REPL Scooper: There is no command named ${command}`);
       }
-      
     });
 
     // remove the text decoration on the selected function / code segment
@@ -78,7 +76,7 @@ export default class ViewLoader {
     // send new message to the webview with the updated values
     if (this._panel) {
       this._panel.webview.postMessage({
-        command: "update",
+        command: 'update',
         code,
         global_variables,
         code_string,
@@ -89,8 +87,8 @@ export default class ViewLoader {
   private saveFileContent(data: string) {
     const folder = this._activeFolder ?? [];
 
-    const fullPath = join(folder[0].uri.fsPath, ".vscode");
-    const filePath = join(fullPath, "generated.js");
+    const fullPath = join(folder[0].uri.fsPath, '.vscode');
+    const filePath = join(fullPath, 'generated.js');
 
     try {
       if (!existsSync(fullPath)) {
@@ -106,7 +104,7 @@ export default class ViewLoader {
     }
 
     const child = exec(`node ${filePath}`, (error, stdout, stderr) => {
-      const parts = stdout.split("\n");
+      const parts = stdout.split('\n');
       // console.log(`stdout: ${stdout}`);
       // console.log(`stderr: ${stderr}`);
       // console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
@@ -115,7 +113,7 @@ export default class ViewLoader {
       }
       if (this._panel) {
         this._panel.webview.postMessage({
-          command: "output",
+          command: 'output',
           output:
             error !== null
               ? error.message
@@ -134,10 +132,10 @@ export default class ViewLoader {
     code_string: string
   ): string {
     const reactAppPathOnDisk = vscode.Uri.file(
-      path.join(this._extensionPath, "configViewer", "configViewer.js")
+      path.join(this._extensionPath, 'configViewer', 'configViewer.js')
     );
     const reactAppUri = reactAppPathOnDisk.with({
-      scheme: "vscode-resource",
+      scheme: 'vscode-resource',
     });
 
     return `<!DOCTYPE html>

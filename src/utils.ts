@@ -1,18 +1,16 @@
-import * as vscode from "vscode";
-import * as path from "path";
-//@ts-ignore
-import { ProgramStatment } from "@typescript-eslint/eslint-plugin";
-import { stat } from "fs";
+import * as path from 'path';
+import * as vscode from 'vscode';
+import * as walk from 'acorn-walk';
 
 export function getPaths(
   panel: vscode.WebviewPanel,
   context: vscode.ExtensionContext
 ) {
   const stylePath = vscode.Uri.file(
-    path.join(context.extensionPath, `src`, `webview`, `media`, `styles.css`)
+    path.join(context.extensionPath, 'src', 'webview', 'media', 'styles.css')
   );
   const scriptPath = vscode.Uri.file(
-    path.join(context.extensionPath, `src`, `webview`, `media`, `script.js`)
+    path.join(context.extensionPath, 'src', 'webview', 'media', 'script.js')
   );
 
   const styles = panel.webview.asWebviewUri(stylePath);
@@ -22,17 +20,17 @@ export function getPaths(
 }
 
 export function parserFunction(
-  program: ProgramStatment[],
+  program: any[],
   user_loc: vscode.Range
-): ProgramStatment | undefined {
+): any | undefined {
   for (const statement of program) {
     const statment_loc = new vscode.Range(
       new vscode.Position(statement.loc.start.line, statement.loc.start.colum),
       new vscode.Position(statement.loc.end.line, statement.loc.end.colum)
     );
     if (inRange(user_loc, statment_loc)) {
-      if (statement.type === "FunctionDeclaration") {
-        if (statement?.body?.type === "BlockStatement") {
+      if (statement.type === 'FunctionDeclaration') {
+        if (statement?.body?.type === 'BlockStatement') {
           const tmp = parserFunction(statement.body.body, user_loc);
           if (tmp) {
             return tmp;
@@ -47,9 +45,9 @@ export function parserFunction(
 }
 
 export function parserCommands(
-  program: ProgramStatment[],
+  program: any[],
   user_loc: vscode.Range
-): ProgramStatment | undefined {
+): any | undefined {
   for (const statement of program) {
     const statment_loc = new vscode.Range(
       new vscode.Position(
@@ -98,17 +96,14 @@ function inRange(user_loc: vscode.Range, statment_loc: vscode.Range) {
   return false;
 }
 
-export function requiresVariables(
-  program: ProgramStatment[],
-  user_line: number
-): ProgramStatment[] {
-  const variables: ProgramStatment[] = [];
+export function requiresVariables(program: any[], user_line: number): any[] {
+  const variables: any[] = [];
 
   for (const statemnt of program) {
     if (
       user_line >= statemnt.loc.start.line &&
-      statemnt.type === "VariableDeclaration" &&
-      statemnt?.declarations[0]?.init?.type === "CallExpression"
+      statemnt.type === 'VariableDeclaration' &&
+      statemnt?.declarations[0]?.init?.type === 'CallExpression'
     ) {
       variables.push(statemnt);
     }
@@ -117,17 +112,14 @@ export function requiresVariables(
   return variables;
 }
 
-export function globalVariables(
-  program: ProgramStatment[],
-  user_line: number
-): ProgramStatment[] {
-  const variables: ProgramStatment[] = [];
+export function globalVariables(program: any[], user_line: number): any[] {
+  const variables: any[] = [];
 
   for (const statemnt of program) {
     if (
       user_line >= statemnt.loc.start.line &&
-      statemnt.type === "VariableDeclaration" &&
-      statemnt?.declarations[0]?.init?.type === "Literal"
+      statemnt.type === 'VariableDeclaration' &&
+      statemnt?.declarations[0]?.init?.type === 'Literal'
     ) {
       variables.push(statemnt);
     }

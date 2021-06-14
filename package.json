@@ -42,6 +42,7 @@
     "vscode:prepublish": "yarn run compile",
     "compile": "npm-run-all compile:*",
     "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
     "watch": "npm-run-all -p watch:*",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./out/test/runTest.js",

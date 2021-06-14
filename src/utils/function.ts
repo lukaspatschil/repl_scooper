@@ -1,14 +1,14 @@
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
 import {
   getRange,
   globalVariables,
   parserFunction,
   requiresVariables,
-} from "../utils";
+} from '../utils';
 
-import ViewLoader from "../view/ViewLoader";
-import { parse } from "acorn";
+import ViewLoader from '../view/ViewLoader';
+import { parse } from 'acorn';
 
 export function func(context: vscode.ExtensionContext) {
   const editor = vscode.window.activeTextEditor;
@@ -22,8 +22,8 @@ export function func(context: vscode.ExtensionContext) {
 
   // parse the source code
   // TODO only if the input is valid (try catch?)
-  const acorn_prog = parse(source ? source : "", {
-    ecmaVersion: "latest",
+  const acorn_prog = parse(source ? source : '', {
+    ecmaVersion: 'latest',
     allowImportExportEverywhere: true,
     allowAwaitOutsideFunction: true,
     locations: true,
@@ -54,7 +54,7 @@ export function func(context: vscode.ExtensionContext) {
   const active_folder = vscode.workspace.workspaceFolders;
 
   if (!active_folder) {
-    const message = "REPL Scooper: Working folder not found, open a folder an try again" ;
+    const message = 'REPL Scooper: Working folder not found, open a folder an try again' ;
     vscode.window.showErrorMessage(message);
     throw new Error(message);
   }
@@ -72,15 +72,15 @@ export function func(context: vscode.ExtensionContext) {
       active_function,
       global_variables,
       requires,
-      source_string ? source_string : "",
+      source_string ? source_string : '',
       editor,
       active_folder
     );
 
     vscode.workspace.onDidSaveTextDocument((e) => {
       const new_source = editor?.document.getText();
-      const new_program = parse(new_source ? new_source : "", {
-        ecmaVersion: "latest",
+      const new_program = parse(new_source ? new_source : '', {
+        ecmaVersion: 'latest',
         allowImportExportEverywhere: true,
         allowAwaitOutsideFunction: true,
         locations: true,
@@ -98,12 +98,12 @@ export function func(context: vscode.ExtensionContext) {
       view.updateWebviewContent(
         new_active_function,
         new_global_variables,
-        new_source_string ? new_source_string : ""
+        new_source_string ? new_source_string : ''
       );
     });
   } else {
     vscode.window.showErrorMessage(
-      "There was nothing selected or your selection is not a function"
+      'There was nothing selected or your selection is not a function'
     );
   }
 }
