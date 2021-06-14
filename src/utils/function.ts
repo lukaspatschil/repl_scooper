@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 
 import {
+  getGlobalScope,
+  getGlobalVariables,
   getRange,
-  globalVariables,
   parserFunction,
   requiresVariables,
 } from '../utils';
@@ -46,7 +47,7 @@ export function func(context: vscode.ExtensionContext) {
   //@ts-ignore
   const active_function = parserFunction(acorn_prog.body, user_pos);
   //@ts-ignore
-  const global_variables = globalVariables(acorn_prog.body, user_line);
+  const globalVariables = getGlobalVariables(acorn_prog);
 
   //@ts-ignore
   const requires = requiresVariables(acorn_prog.body, user_line);
@@ -70,7 +71,7 @@ export function func(context: vscode.ExtensionContext) {
     const view = new ViewLoader(
       context.extensionPath,
       active_function,
-      global_variables,
+      globalVariables,
       requires,
       source_string ? source_string : '',
       editor,
@@ -88,16 +89,12 @@ export function func(context: vscode.ExtensionContext) {
 
       //@ts-ignore
       const new_active_function = parserFunction(new_program.body, user_line);
-      const new_global_variables = globalVariables(
-        //@ts-ignore
-        new_program.body,
-        user_line
-      );
+      const newGlobalVariables = getGlobalVariables(new_program);
       const new_range = getRange(new_active_function);
       const new_source_string = editor?.document.getText(new_range);
       view.updateWebviewContent(
         new_active_function,
-        new_global_variables,
+        newGlobalVariables,
         new_source_string ? new_source_string : ''
       );
     });

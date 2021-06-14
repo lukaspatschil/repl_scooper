@@ -1,3 +1,4 @@
+import * as acorn from 'acorn';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
@@ -19,7 +20,7 @@ export default class ViewLoader {
   constructor(
     extensionPath: string,
     code: any,
-    global_variables: any[],
+    globalVariables: acorn.Node[],
     requires: any[],
     code_string: string,
     editor: vscode.TextEditor,
@@ -47,7 +48,7 @@ export default class ViewLoader {
 
     this._panel.webview.html = this.getWebviewContent(
       code,
-      global_variables,
+      globalVariables,
       requires,
       code_string
     );

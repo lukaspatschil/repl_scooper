@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as walk from 'acorn-walk';
 
+import acorn = require('acorn');
+
 export function getPaths(
   panel: vscode.WebviewPanel,
   context: vscode.ExtensionContext
@@ -112,20 +114,22 @@ export function requiresVariables(program: any[], user_line: number): any[] {
   return variables;
 }
 
-export function globalVariables(program: any[], user_line: number): any[] {
-  const variables: any[] = [];
+export function getGlobalVariables(program: acorn.Node): acorn.Node[] {
+  const variables: acorn.Node[] = [];
 
-  for (const statemnt of program) {
-    if (
-      user_line >= statemnt.loc.start.line &&
-      statemnt.type === 'VariableDeclaration' &&
-      statemnt?.declarations[0]?.init?.type === 'Literal'
-    ) {
-      variables.push(statemnt);
+  walk.ancestor(program, {
+    VariableDeclaration(node, ancestor) {
+      if ((ancestor as any[]).length === 2) {
+        variables.push(node);
+      }
     }
-  }
+  });
 
   return variables;
+}
+
+export function getGlobalScope(program: acorn.Node) {
+  
 }
 
 export function getRange(active_function: any): vscode.Range {
