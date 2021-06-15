@@ -1,5 +1,5 @@
 import { IVariable } from './types/interface';
-import type { Node } from 'acorn';
+import acorn from 'acorn';
 import { useState } from 'react';
 
 export const parseParams = (params: any[]) => {
@@ -24,21 +24,8 @@ export const convert_value = (value: string) => {
   }
 };
 
-export const get_type = (ts_type: any) => {
-  switch (ts_type) {
-    case 'TSNumberKeyword':
-      return 'number';
-    case 'TSStringKeyword':
-      return 'string';
-    case 'TSBooleanKeyword':
-      return 'boolean';
-    default:
-      return 'unknown';
-  }
-};
-
 export const make_global = (globals: any[]) => {
-  const ast: Node = {
+  const ast: acorn.Node = {
     type: 'Program',
     // @ts-ignore
     body: [],
@@ -87,7 +74,7 @@ export const make_function_call = (name: string, variables: Array<Node>) => {
     },
   };
 
-  const ast: Node = {
+  const ast: acorn.Node = {
     type: 'Program',
     // @ts-ignore
     body: [l],
@@ -266,7 +253,7 @@ export const make_promise = (function_name: string, function_args: any[]) => {
     },
   };
 
-  const ast: Node = {
+  const ast: acorn.Node = {
     type: 'Program',
     // @ts-ignore
     body: [promise],

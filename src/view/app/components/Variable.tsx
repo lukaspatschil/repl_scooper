@@ -3,7 +3,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { convert_value } from '../util';
 
 const Variable: FunctionComponent<{ name: string, preValue?: any, updateValue: (name: string, value: any) => void }> = ({ name, preValue, updateValue }) => {
-  const [value, setValue] = useState((preValue !== undefined ? preValue : ""));
+  const [value, setValue] = useState((preValue !== undefined ? preValue : ''));
 
   const handleChange = (eventValue: string) => {
     setValue(eventValue);
