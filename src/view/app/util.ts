@@ -89,7 +89,6 @@ export const useForceUpdate = () => {
 };
 
 export const make_clg = (name: string, estree: any) => {
-  console.log(JSON.stringify(estree));
   return {
     type: 'CallExpression',
     callee: {
