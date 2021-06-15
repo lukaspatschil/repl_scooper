@@ -13,13 +13,23 @@ export function activate(context: vscode.ExtensionContext) {
   // Now provide the implementation of the command with registerCommand
   // The commandId parameter must match the command field in package.json
 
-  let webview = vscode.commands.registerCommand('extension.replscooper', () =>
-    func(context)
-  );
+  const webview = vscode.commands.registerCommand('extension.replscooper', () => {
+    try {
+      func(context);
+    } catch (error) {
+      vscode.window.showErrorMessage(error);
+    }
+  });
 
-  let commandview = vscode.commands.registerCommand(
+  const commandview = vscode.commands.registerCommand(
     'extension.replcommand',
-    () => command(context)
+    () => {
+      try {
+        command(context);
+      } catch (error) {
+        vscode.window.showErrorMessage(error);
+      }
+    }
   );
 
   context.subscriptions.push(webview);
