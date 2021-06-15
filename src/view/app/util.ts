@@ -110,14 +110,29 @@ export const make_clg = (name: string, estree: any) => {
   };
 };
 
-export const make_promise = (function_name: string, function_args: any[]) => {
-  const convertedValues = function_args.map((el) => ({
-    type: 'Literal',
-    //@ts-ignore
-    value: el.value,
-    //@ts-ignore
-    raw: typeof el.value === 'string' ? `"${el.value}"` : `${el.value}`,
-  }));
+export const make_promise = (function_name: string, function_args: any) => {
+  let argumentsInput;
+
+  if (function_args?.expression) {
+    argumentsInput = function_args.expression;
+  } else {
+    const convertedValues = function_args.map((el) => ({
+      type: 'Literal',
+      //@ts-ignore
+      value: el.value,
+      //@ts-ignore
+      raw: typeof el.value === 'string' ? `"${el.value}"` : `${el.value}`,
+    }));
+    argumentsInput = {
+      type: 'CallExpression',
+      callee: {
+        type: 'Identifier',
+        name: function_name,
+      },
+      arguments: [...convertedValues],
+      optional: false,
+    };
+  };
 
   const promise = {
     type: 'ExpressionStatement',
@@ -144,17 +159,7 @@ export const make_promise = (function_name: string, function_args: any[]) => {
                 computed: false,
                 optional: false,
               },
-              arguments: [
-                {
-                  type: 'CallExpression',
-                  callee: {
-                    type: 'Identifier',
-                    name: function_name,
-                  },
-                  arguments: [...convertedValues],
-                  optional: false,
-                },
-              ],
+              arguments: [argumentsInput],
               optional: false,
             },
             property: {

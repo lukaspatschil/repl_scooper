@@ -1,4 +1,4 @@
-import { make_clg, make_global, make_promise } from '../util';
+import { make_global, make_promise } from '../util';
 import { useDebugValue, useEffect, useState } from 'react';
 
 import acorn from 'acorn';
@@ -48,7 +48,7 @@ export const useCode = (
 
       fileString = `${require_string}\n${global_string}\n${generated}\n${something}`;
     } else {
-      const call = make_clg(generated, estree);
+      const call = make_promise(generated, estree);
       // @ts-ignore
       const something = generate(call);
       fileString = `${require_string}\n${global_string}\n${something}`;
