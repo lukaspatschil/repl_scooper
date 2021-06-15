@@ -21,6 +21,8 @@
     "**/view/app/config.tsx",
     "**/view/app/App.tsx",
     "**/view/app/components/**",
+		"**/view/app/hooks/**",
+		"**/view/app/**",
     "sum.ts",
     "**/asthero",
     ".vscode"
