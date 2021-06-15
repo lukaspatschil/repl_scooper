@@ -34,12 +34,12 @@ export function func(context: vscode.ExtensionContext) {
   const user_line = position?.line ? position.line + 1 : -1;
   const user_pos = new vscode.Range(
     new vscode.Position(
-      (position?.line ?? -2) + 1,
-      (position?.character ?? -2) + 1
+      (position?.line ?? - 2) + 1,
+      (position?.character ?? - 2) + 1
     ),
     new vscode.Position(
-      (position?.line ?? -2) + 1,
-      (position?.character ?? -2) + 1
+      (position?.line ?? - 2) + 1,
+      (position?.character ?? - 2) + 1
     )
   );
 

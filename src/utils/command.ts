@@ -16,7 +16,7 @@ export function command(context: vscode.ExtensionContext) {
   const editor = vscode.window.activeTextEditor;
 
   // getting the cursor position from the user
-  const position = editor?.selection?.active;
+  const position = editor?.selection;
 
   // reading the whole file as a string
   // TODO add validation and only allow js and ts
@@ -32,20 +32,20 @@ export function command(context: vscode.ExtensionContext) {
   });
 
   // fix position, as vscode begins at 0, 0 and eslint alt 1,0
-  const user_line = position?.line ? position.line + 1 : -1;
+  const user_line = position?.active?.line ? position.active.line + 1 : -1;
   const user_pos = new vscode.Range(
     new vscode.Position(
-      (position?.line ?? -2) + 1,
-      (position?.character ?? -2) + 1
+      (position?.start?.line ?? - 2) + 1,
+      (position?.start?.character ?? - 2) + 1
     ),
     new vscode.Position(
-      (position?.line ?? -2) + 1,
-      (position?.character ?? -2) + 1
+      (position?.end?.line ?? - 2) + 1,
+      (position?.end?.character ?? - 2) + 1
     )
   );
 
   //@ts-ignore
-  const active_command = parserCommands(acorn_prog.body, user_loc);
+  const active_command = parserCommands(acorn_prog.body, user_pos);
 
   const globalVariables = getGlobalVariables(acorn_prog);
   const globalScope = getGlobalScope(acorn_prog, user_line);
@@ -82,9 +82,8 @@ export function command(context: vscode.ExtensionContext) {
         locations: true,
       });
 
-      
-        //@ts-ignore
-      const new_active_command = parserCommands(acorn_prog.body, user_loc);
+      //@ts-ignore
+      const new_active_command = parserCommands(acorn_prog.body, user_pos);
       const newGlobalVariables = getGlobalVariables(new_program);
       const new_range = getRange(new_active_command);
       const new_source_string = editor?.document.getText(new_range);
