@@ -37,7 +37,10 @@ export const make_global = (globals: any[]) => {
   return ast;
 };
 
-export const make_function_call = (name: string, variables: Array<acorn.Node>) => {
+export const make_function_call = (
+  name: string,
+  variables: Array<acorn.Node>
+) => {
   const convertedValues = variables.map((el) => ({
     type: 'Literal',
     //@ts-ignore
@@ -131,7 +134,7 @@ export const make_promise = (function_name: string, function_args: any) => {
       arguments: [...convertedValues],
       optional: false,
     };
-  };
+  }
 
   const promise = {
     type: 'ExpressionStatement',
@@ -198,8 +201,27 @@ export const make_promise = (function_name: string, function_args: any) => {
                 },
                 arguments: [
                   {
-                    type: 'Identifier',
-                    name: 'data',
+                    type: 'CallExpression',
+                    callee: {
+                      type: 'MemberExpression',
+                      object: {
+                        type: 'Identifier',
+                        name: 'JSON',
+                      },
+                      property: {
+                        type: 'Identifier',
+                        name: 'stringify',
+                      },
+                      computed: false,
+                      optional: false,
+                    },
+                    arguments: [
+                      {
+                        type: 'Identifier',
+                        name: 'data',
+                      },
+                    ],
+                    optional: false,
                   },
                 ],
                 optional: false,

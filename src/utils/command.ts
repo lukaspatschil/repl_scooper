@@ -87,6 +87,7 @@ export function command(context: vscode.ExtensionContext) {
       const newGlobalVariables = getGlobalVariables(new_program);
       const new_range = getRange(new_active_command);
       const new_source_string = editor?.document.getText(new_range);
+
       view.updateWebviewContent(
         new_active_command,
         newGlobalVariables,

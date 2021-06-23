@@ -1,4 +1,5 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from 'react';
+
 import { Error } from './Error';
 import { Success } from './Success';
 
@@ -12,7 +13,7 @@ export const Output: FunctionComponent<{ value: any }> = ({ value }) => {
   useEffect(() => {
     if (value) {
       Promise.resolve(value)
-        .then(data => setOutput(<Success>{data}</Success>))
+        .then(data => setOutput(<Success>{JSON.stringify(JSON.parse(data), null, 2)}</Success>))
         .catch(error => setOutput(<Error>{error}</Error>));
     }
   }, [value]);
