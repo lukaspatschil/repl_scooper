@@ -119,7 +119,7 @@ export function getGlobalVariables(program: acorn.Node): acorn.Node[] {
 
   walk.ancestor(program, {
     VariableDeclaration(node, ancestor) {
-      if ((ancestor as any[]).length === 2) {
+      if ((ancestor as any[]).length === 2 && (node as any)?.declarations[0]?.init?.type !== 'CallExpression') {
         variables.push(node);
       }
     }

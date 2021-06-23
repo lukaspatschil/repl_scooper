@@ -8,7 +8,7 @@ input {
   border: none;
   border-width: 0;
   color: var(--vscode-editor-foreground);
-  width: 4rem;
+  width: auto;
 }
 
 input:focus {
