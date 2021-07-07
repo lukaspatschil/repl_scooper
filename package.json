@@ -1,6 +1,6 @@
 {
   "name": "repl-scooper",
-  "publisher": "LukasSpatschil",
+  "publisher": "LukaSpatschil",
   "displayName": "REPL Scooper",
   "description": "An extension to experiment with code snippets",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/lukaspatschil/repl-scooper"
   },
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.48.0"
   },
