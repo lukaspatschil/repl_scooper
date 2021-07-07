@@ -4,7 +4,7 @@ on:
     types: [created]
 jobs:
   npmInstall:
-    name: npm install
+    name: yarn install
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,10 +13,6 @@ jobs:
           node-version: '14'
           cache: 'yarn'
       - run: yarn install
-      - name: Master
-        uses: actions/bin/filter@master
-        with:
-          args: branch master
       - name: Vscode release plugin
         uses: JCofman/vscodeaction@master
         env:
