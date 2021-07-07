@@ -83,10 +83,11 @@ export function command(context: vscode.ExtensionContext) {
       });
 
       //@ts-ignore
-      const new_active_command = parserCommands(acorn_prog.body, user_pos);
+      const new_active_command = parserCommands(new_program.body, user_pos);
       const newGlobalVariables = getGlobalVariables(new_program);
       const new_range = getRange(new_active_command);
       const new_source_string = editor?.document.getText(new_range);
+
       view.updateWebviewContent(
         new_active_command,
         newGlobalVariables,

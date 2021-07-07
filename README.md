@@ -26,13 +26,3 @@ Currently there are no extension settings. We will keep you posted about them in
 Please let me know if you encounter any issues with the extension so I can fix them.
 
 In order to let me know please submit them to [https://github.com/lukaspatschil/repl-scooper/issues](https://github.com/lukaspatschil/repl-scooper/issues).
-
-## Known Issues
-
-- The repl `command` is not working with the webview.
-
-## Release Notes
-
-### 0.0.1
-
-Pre release of the extension.

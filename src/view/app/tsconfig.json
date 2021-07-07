@@ -1,4 +1,3 @@
-
 {
   "compilerOptions": {
       "module": "esnext",
@@ -8,7 +7,7 @@
       "lib": [
           "es6",
           "dom"
-      ],  
+      ],
       "jsx": "react",
       "sourceMap": true,
       "rootDir": "..",
