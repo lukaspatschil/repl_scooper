@@ -1,25 +1,37 @@
 {
   "name": "repl-scooper",
-  "publisher": "LukaSpatschil",
   "displayName": "REPL Scooper",
   "description": "An extension to experiment with code snippets",
+  "version": "0.1.2",
+  "publisher": "LukaSpatschil",
+  "homepage": "https://marketplace.visualstudio.com/items?itemName=LukaSpatschil.repl-scooper",
   "repository": {
     "type": "git",
     "url": "https://github.com/lukaspatschil/repl-scooper"
   },
   "license": "MIT",
-  "version": "0.1.2",
-  "icon": "icon.png",
+  "bugs": {
+    "url": "https://github.com/lukaspatschil/repl-scooper/issues"
+  },
   "engines": {
     "vscode": "^1.48.0"
   },
+  "keywords": [
+    "repl",
+    "javascript",
+    "development",
+    "testing",
+    "js",
+    "nodejs"
+  ],
   "categories": [
-    "Other"
+    "Testing"
   ],
   "activationEvents": [
     "onCommand:extension.replscooper",
     "onCommand:extension.replcommand"
   ],
+  "icon": "icon.png",
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
