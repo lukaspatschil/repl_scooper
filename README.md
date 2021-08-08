@@ -2,7 +2,7 @@
 
 Repl Scooper is a extension which helps programmers while developing new JS functions or code snippets. 
 
-It allowes users to evaluate code snippets in an enclosed envioment in order to better get a graps of small parts of the programm or debug certain features.
+It allows users to evaluate code snippets in an enclosed environment in order to better get a grasp of small parts of the program or debug certain features.
 
 ## Features
 
@@ -12,6 +12,10 @@ The extension has two unique commands:
 - `command`: If you want to experiment with parts of the code or just some code snippets use the `command` to select everything marked.
 
 If you make changes to your code and save it the repl scooper will automatically update itself.
+
+## Usage
+
+The plugin can be used by accessing the command pallet with `shift + cmd + p` or `shift + ctrl + p` and searching for `REPL Scooper: function` or `command` and pressing enter while inside a valid function or statement. If there is no valid statement detected, the plugin will alert you with an error message.
 
 ## Requirements
 
