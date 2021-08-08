@@ -1,24 +1,37 @@
 {
   "name": "repl-scooper",
-  "publisher": "LukaSpatschil",
   "displayName": "REPL Scooper",
   "description": "An extension to experiment with code snippets",
+  "version": "0.2.1",
+  "publisher": "LukaSpatschil",
+  "homepage": "https://marketplace.visualstudio.com/items?itemName=LukaSpatschil.repl-scooper",
   "repository": {
     "type": "git",
     "url": "https://github.com/lukaspatschil/repl-scooper"
   },
   "license": "MIT",
-  "version": "0.1.2",
+  "bugs": {
+    "url": "https://github.com/lukaspatschil/repl-scooper/issues"
+  },
   "engines": {
     "vscode": "^1.48.0"
   },
+  "keywords": [
+    "repl",
+    "javascript",
+    "development",
+    "testing",
+    "js",
+    "nodejs"
+  ],
   "categories": [
-    "Other"
+    "Testing"
   ],
   "activationEvents": [
     "onCommand:extension.replscooper",
     "onCommand:extension.replcommand"
   ],
+  "icon": "icon.png",
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -54,6 +67,7 @@
   },
   "devDependencies": {
     "@types/acorn": "^4.0.5",
+    "@types/astring": "^1.7.0",
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.14.20",
     "@types/react": "^16.9.55",
@@ -61,21 +75,20 @@
     "@types/react-syntax-highlighter": "^13.5.0",
     "@types/vscode": "^1.48.0",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/parser": "^4.29.0",
     "css-loader": "^5.0.0",
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
     "mocha": "^7.1.2",
+    "npm-run-all": "^4.1.5",
     "style-loader": "^2.0.0",
     "ts-loader": "^8.0.7",
     "typescript": "^3.8.3",
     "vscode-test": "^1.3.0",
     "webpack": "^5.3.2",
-    "webpack-cli": "^4.1.0",
-    "yarn-run-all": "^3.1.1"
+    "webpack-cli": "^4.1.0"
   },
   "dependencies": {
-    "@types/astring": "^1.3.0",
-    "@typescript-eslint/parser": "^4.14.0",
     "acorn": "^8.0.4",
     "acorn-walk": "^8.1.0",
     "astring": "^1.6.0",

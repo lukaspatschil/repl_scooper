@@ -15,7 +15,7 @@ export const App: FunctionComponent<{
   requires: Array<any>
 }> = ({ code, global_variables, globalScope, requires }) => {
   const [output, setOutput] = useState(null);
-  const [setVariable, globals, setGlobal, setCode,] = useCode(code, global_variables, globalScope, requires);
+  const [setVariable, globals, setGlobal, setCode] = useCode(code, global_variables, globalScope, requires);
   const [datasets, addDataSet] = useDataset(code);
   const forceUpdate = useForceUpdate();
 
@@ -49,11 +49,11 @@ export const App: FunctionComponent<{
         <h2>Your global variables:</h2>
         {Array.isArray(globals) && globals.map(el => <Variable key={el?.declarations[0]?.id?.name} name={el?.declarations[0]?.id?.name} preValue={el?.declarations[0]?.init?.value} updateValue={setGlobal} />)}
       </section>
-      <section>
+      {!!datasets[0]?.variables.length && <section>
         <h2>Your function variables:</h2>
         <button onClick={addDataSet}>add set</button>
-        {Array.isArray(datasets) && datasets.map((el, id) => <Variables variables={el.variables} setVariable={setVariable} identifier={id} key={id} />)}
-      </section>
+        {datasets?.map((el, id) => <Variables variables={el.variables} setVariable={setVariable} identifier={id} key={id} />)}
+      </section>}
       <section>
         <h2>Your output:</h2>
         <Output value={output} />

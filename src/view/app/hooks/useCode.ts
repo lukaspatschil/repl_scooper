@@ -93,5 +93,7 @@ export const useCode = (
 
   useDebugValue(output || 'Not generated');
 
+  updateOutput();
+
   return [setVariable, globals, setGlobal, setCode, output] as const;
 };
