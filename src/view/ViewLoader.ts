@@ -2,16 +2,16 @@ import * as acorn from 'acorn';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-import { existsSync, mkdirSync, unlinkSync, writeFileSync } from 'fs';
-
 import { exec } from 'child_process';
 import { getRange } from '../utils';
 import { join } from 'path';
+import { constants } from 'fs';
+import { writeFile, unlink, access } from 'fs/promises';
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
   private readonly _extensionPath: string;
-  private readonly _activeFolder: readonly vscode.WorkspaceFolder[] | undefined;
+  private readonly _activeFolder: string;
   private readonly activeDecorationType =
     vscode.window.createTextEditorDecorationType({
       backgroundColor: 'green',
@@ -25,7 +25,7 @@ export default class ViewLoader {
     requires: any[],
     code_string: string,
     editor: vscode.TextEditor,
-    active_folder: readonly vscode.WorkspaceFolder[] | undefined
+    active_folder: string
   ) {
     this._extensionPath = extensionPath;
 
@@ -87,44 +87,45 @@ export default class ViewLoader {
     }
   }
 
-  private saveFileContent(data: string) {
-    const folder = this._activeFolder ?? [];
-
-    const fullPath = join(folder[0].uri.fsPath, '.vscode');
-    const filePath = join(fullPath, 'generated.js');
+  private async saveFileContent(data: string) {
+    const fullPath = this._activeFolder.split('\\');
+    fullPath.pop();
+    const filePath = join(...fullPath, 'generated.js');
 
     try {
-      if (!existsSync(fullPath)) {
-        mkdirSync(fullPath);
-      }
-
-      writeFileSync(filePath, data);
+      await writeFile(filePath, data);
     } catch (error) {
       vscode.window.showErrorMessage(
-        `Configuration could not be saved to ${this._extensionPath}`
+        `Configuration could not be saved to ${this._extensionPath} - ${error}`
       );
       return;
     }
 
-    const child = exec(`node ${filePath}`, (error, stdout, stderr) => {
-      const parts = stdout.split('\n');
-      // console.log(`stdout: ${stdout}`);
-      // console.log(`stderr: ${stderr}`);
-      // console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
-      if (error !== null) {
-        console.error(`exec error: ${error}`);
-      }
-      if (this._panel) {
-        this._panel.webview.postMessage({
-          command: 'output',
-          output:
-            error !== null
-              ? error.message
-              : parts[parts.length > 1 ? parts.length - 2 : 0],
-        });
-      }
+    access(filePath, constants.F_OK).then(() => {
+      const child = exec(`node ${filePath}`, async (error, stdout, stderr) => {
+        const parts = stdout.split('\n');
+        // console.log(`stdout: ${stdout}`);
+        // console.log(`stderr: ${stderr}`);
+        // console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
+        if (error !== null) {
+          console.error(`exec error: ${error}`);
+        }
+        if (this._panel) {
+          this._panel.webview.postMessage({
+            command: 'output',
+            output:
+              error !== null
+                ? error.message
+                : parts[parts.length > 1 ? parts.length - 2 : 0],
+          });
+        }
 
-      // unlinkSync(filePath);
+        try {
+          await unlink(filePath);
+        } catch (error) {
+          console.error(error as string);
+        }
+      });
     });
   }
 

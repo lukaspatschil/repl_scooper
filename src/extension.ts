@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
     try {
       func(context);
     } catch (error) {
-      vscode.window.showErrorMessage(error);
+      vscode.window.showErrorMessage(error as string);
     }
   });
 
@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
       try {
         command(context);
       } catch (error) {
-        vscode.window.showErrorMessage(error);
+        vscode.window.showErrorMessage(error as string);
       }
     }
   );

@@ -70,7 +70,7 @@ export function command(context: vscode.ExtensionContext) {
       requires,
       source_string ? source_string : '',
       editor,
-      active_folder
+      vscode.window.activeTextEditor?.document.uri.fsPath ?? ''
     );
 
     vscode.workspace.onDidSaveTextDocument((e) => {
