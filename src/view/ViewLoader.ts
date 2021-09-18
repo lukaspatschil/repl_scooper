@@ -7,6 +7,7 @@ import { getRange } from '../utils';
 import { join } from 'path';
 import { constants } from 'fs';
 import { writeFile, unlink, access } from 'fs/promises';
+import { build } from 'esbuild';
 
 export default class ViewLoader {
   private readonly _panel: vscode.WebviewPanel | undefined;
@@ -94,6 +95,14 @@ export default class ViewLoader {
 
     try {
       await writeFile(filePath, data);
+      await build({
+        allowOverwrite: true,
+        bundle: true,
+        entryPoints: [filePath],
+        target: 'es6',
+        platform: 'node',
+        outfile: filePath,
+      });
     } catch (error) {
       vscode.window.showErrorMessage(
         `Configuration could not be saved to ${this._extensionPath} - ${error}`

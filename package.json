@@ -2,7 +2,7 @@
   "name": "repl-scooper",
   "displayName": "REPL Scooper",
   "description": "An extension to experiment with code snippets",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "publisher": "LukaSpatschil",
   "homepage": "https://marketplace.visualstudio.com/items?itemName=LukaSpatschil.repl-scooper",
   "repository": {
@@ -77,6 +77,7 @@
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.29.0",
     "css-loader": "^5.0.0",
+    "esbuild": "^0.12.28",
     "esbuild-loader": "^2.15.1",
     "eslint": "^6.8.0",
     "glob": "^7.1.6",
@@ -92,7 +93,6 @@
     "acorn": "^8.0.4",
     "acorn-walk": "^8.1.0",
     "astring": "^1.6.0",
-    "esbuild-wasm": "^0.12.28",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-syntax-highlighter": "^15.3.0"
