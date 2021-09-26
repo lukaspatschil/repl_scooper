@@ -2,7 +2,7 @@
   "name": "repl-scooper",
   "displayName": "REPL Scooper",
   "description": "An extension to experiment with code snippets",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publisher": "LukaSpatschil",
   "homepage": "https://marketplace.visualstudio.com/items?itemName=LukaSpatschil.repl-scooper",
   "repository": {
@@ -15,7 +15,7 @@
   },
   "engines": {
     "node": ">= 14",
-    "vscode": "^1.48.0"
+    "vscode": "^1.60.0"
   },
   "keywords": [
     "repl",
