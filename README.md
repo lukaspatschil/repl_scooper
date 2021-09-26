@@ -19,7 +19,7 @@ The plugin can be used by accessing the command pallet with `shift + cmd + p` or
 
 ## Requirements
 
-To use the extension it is required to install node.js on your system so it can be used to evaluate to code. You must also `require` and install all neccesary `node-packages` in order for them to be used.
+To use the extension it is required to install node.js on your system so it can be used to evaluate to code. You must also `require` and install all necessary `node-packages` in order for them to be used.
 
 ## Extension Settings
 

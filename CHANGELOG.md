@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2021-09-26
+### Added
+- Support for ES modules as an alternate source of imports
+
+### Changed
+- Update dependencies to latest version and fix npm audits
+### Fixed
+- Typo in the CHANGELOG.md and README.md
+
 ## [0.3.0] - 2021-09-19
 ### Added
 - Use esbuild to transform generated code and bundle dependencies
