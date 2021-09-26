@@ -1,6 +1,6 @@
 //! this is just for testing
 // this is a function
-const test123 = "a";
+const test123 = 'a';
 const testasd = 1;
 
 function sum(a, b, c) {
@@ -34,15 +34,15 @@ function foo1() {
     const random = Math.random();
 
     if (random >= 0.5) {
-      resolve("ok");
+      resolve('ok');
     }
     else
     {
-      reject("error");
+      reject('error');
     }
   });
 
   return promise;
 }
 
-const asd = "123";
+const asd = '123';

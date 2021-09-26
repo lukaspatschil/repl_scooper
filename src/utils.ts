@@ -101,13 +101,14 @@ function inRange(user_loc: vscode.Range, statment_loc: vscode.Range) {
 export function requiresVariables(program: any[], user_line: number): any[] {
   const variables: any[] = [];
 
-  for (const statemnt of program) {
+  for (const statement of program) {
     if (
-      user_line >= statemnt.loc.start.line &&
-      statemnt.type === 'VariableDeclaration' &&
-      statemnt?.declarations[0]?.init?.type === 'CallExpression'
+      user_line >= statement.loc.start.line &&
+      ((statement.type === 'VariableDeclaration' &&
+      statement?.declarations[0]?.init?.type === 'CallExpression') ||
+      statement.type === 'ImportDeclaration')
     ) {
-      variables.push(statemnt);
+      variables.push(statement);
     }
   }
 
