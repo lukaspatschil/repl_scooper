@@ -4,6 +4,8 @@ Repl Scooper is a extension which helps programmers while developing new JS func
 
 It allows users to evaluate code snippets in an enclosed environment in order to better get a grasp of small parts of the program or debug certain features.
 
+![Quick demonstration of the plugin](/assets/demo.gif)
+
 ## Features
 
 The extension has two unique commands:
