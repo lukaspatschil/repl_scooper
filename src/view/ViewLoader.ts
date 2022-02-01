@@ -59,7 +59,7 @@ export default class ViewLoader {
     this._panel.webview.onDidReceiveMessage(({ command, value }) => {
       switch (command) {
         case 'SaveIt':
-          this.saveFileContent(value);
+          this.executeContent(value);
           return;
         default:
           throw new Error(`REPL Scooper: There is no command named ${command}`);
@@ -88,54 +88,30 @@ export default class ViewLoader {
     }
   }
 
-  private async saveFileContent(data: string) {
-    const fullPath = this._activeFolder.split('\\');
-    fullPath.pop();
-    const filePath = join(...fullPath, 'generated.js');
+  private async executeContent(data: string) {
+    const escaped = this.escapeQuotes(data);
 
-    try {
-      await writeFile(filePath, data);
-      await build({
-        allowOverwrite: true,
-        bundle: true,
-        entryPoints: [filePath],
-        target: 'es6',
-        platform: 'node',
-        outfile: filePath,
-      });
-    } catch (error) {
-      vscode.window.showErrorMessage(
-        `Configuration could not be saved to ${this._extensionPath} - ${error}`
-      );
-      return;
-    }
-
-    access(filePath, constants.F_OK).then(() => {
-      const child = exec(`node ${filePath}`, async (error, stdout, stderr) => {
-        const parts = stdout.split('\n');
-        // console.log(`stdout: ${stdout}`);
-        // console.log(`stderr: ${stderr}`);
-        // console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
-        if (error !== null) {
-          console.error(`exec error: ${error}`);
-        }
-        if (this._panel) {
-          this._panel.webview.postMessage({
-            command: 'output',
-            output:
-              error !== null
-                ? error.message
-                : parts[parts.length > 1 ? parts.length - 2 : 0],
-          });
-        }
-
-        try {
-          await unlink(filePath);
-        } catch (error) {
-          console.error(error as string);
-        }
-      });
+    const child = exec(`node -e "${escaped}"`, async (error, stdout, stderr) => {
+      const parts = stdout.split('\n');
+      // console.log(`stdout: ${stdout}`);
+      // console.log(`stderr: ${stderr}`);
+      // console.log(`output: ${parts[parts.length > 1 ? parts.length - 2 : 0]}`);
+      if (error) {
+        vscode.window.showErrorMessage(
+          `Code could not be executed.\n${error}`
+        );
+      }
+      if (this._panel && !error) {
+        this._panel.webview.postMessage({
+          command: 'output',
+          output: parts[parts.length > 1 ? parts.length - 2 : 0],
+        });
+      }
     });
+  }
+
+  private escapeQuotes(data: string) : string {
+    return data.replace(/"/g, '\\"');
   }
 
   private getWebviewContent(
